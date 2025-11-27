@@ -1,0 +1,47 @@
+﻿{
+    "version":  "2.0.0",
+    "tasks":  [
+                  {
+                      "label":  "Django: Runserver",
+                      "problemMatcher":  [
+
+                                         ],
+                      "command":  "D:\\DJANGO-PROJECTS\\SpaceBook\\.venv\\Scripts\\python.exe",
+                      "type":  "shell",
+                      "args":  [
+                                   "manage.py",
+                                   "runserver"
+                               ],
+                      "group":  {
+                                    "kind":  "build",
+                                    "isDefault":  true
+                                }
+                  },
+                  {
+                      "label":  "Django: Make Migrations",
+                      "problemMatcher":  [
+
+                                         ],
+                      "command":  "D:\\DJANGO-PROJECTS\\SpaceBook\\.venv\\Scripts\\python.exe",
+                      "type":  "shell",
+                      "args":  [
+                                   "manage.py",
+                                   "makemigrations"
+                               ],
+                      "group":  "none"
+                  },
+                  {
+                      "label":  "Django: Run Migrations",
+                      "problemMatcher":  [
+
+                                         ],
+                      "command":  "D:\\DJANGO-PROJECTS\\SpaceBook\\.venv\\Scripts\\python.exe",
+                      "type":  "shell",
+                      "args":  [
+                                   "manage.py",
+                                   "migrate"
+                               ],
+                      "group":  "none"
+                  }
+              ]
+}
