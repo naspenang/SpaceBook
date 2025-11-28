@@ -215,10 +215,11 @@ $footerPath = Join-Path $templatesDir "footer.html"
 
 if (-not (Test-Path $navPath)) {
     @"
+{% load static %}
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
   <div class="container-fluid">
     <a class="navbar-brand" href="/">
-      <img src="/media/logo.png" style="height: 40px; margin-top: -5px" />
+      <img src="{% static 'images/logo.png' %}" style="height: 40px; margin-top: -5px" />
       $projectName
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">

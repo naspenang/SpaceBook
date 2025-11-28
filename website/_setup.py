@@ -149,10 +149,11 @@ def ensure_nav_template():
 
     with open(NAV_FILE, "w") as f:
         f.write(
+            "{% load static %}\n"
             '<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">\n'
             '  <div class="container-fluid">\n'
             '  <a class="navbar-brand" href="/">'
-            f'<img src="/media/logo.png" style="height: 40px; margin-top: -5px" />'
+            f'<img src="{{% static \'images/logo.png\' %}}" style="height: 40px; margin-top: -5px" />'
             f"    {APP_NAME.title()}"
             "    </a>"
             '    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">\n'
