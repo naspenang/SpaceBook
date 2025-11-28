@@ -38,5 +38,6 @@ Check:
 ---
 
 ### 🔹 Can outsiders use SpaceBook?
-No. UiTM Google login required.
+No. UiTM Google login required. Or you may register as external member in the library and get the required UiTM Google login.
+
 
