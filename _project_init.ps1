@@ -1804,20 +1804,31 @@ else {
 }
 
 # -------------------------------------------------
-# 12.5 Run collectstatic (safe mode)
+# 12.5 Re-activate venv and run collectstatic (safe mode)
 # -------------------------------------------------
 Write-Host ""
-Write-Host "Running 'python manage.py collectstatic --noinput'..." -ForegroundColor Yellow
 
-try {
-    python manage.py collectstatic --noinput
-    Write-Host "Static files collected successfully." -ForegroundColor Green
-    $created += "Static files collected (collectstatic)"
+if (Test-Path ".\.venv\Scripts\Activate.ps1" -and (Test-Path ".\manage.py")) {
+    Write-Host "Re-activating virtual environment (.venv) before collectstatic..." -ForegroundColor Yellow
+    & ".\.venv\Scripts\Activate.ps1"
+    Write-Host "Virtual environment re-activated." -ForegroundColor Green
+
+    Write-Host "Running 'python manage.py collectstatic --noinput'..." -ForegroundColor Yellow
+    try {
+        python manage.py collectstatic --noinput
+        Write-Host "Static files collected successfully." -ForegroundColor Green
+        $created += "Static files collected (collectstatic)"
+    }
+    catch {
+        Write-Host "WARNING: collectstatic failed: $($_.Exception.Message)" -ForegroundColor Red
+        $skipped += "collectstatic (failed)"
+    }
 }
-catch {
-    Write-Host "WARNING: collectstatic failed: $($_.Exception.Message)" -ForegroundColor Red
-    $skipped += "collectstatic (failed)"
+else {
+    Write-Host "Skipping collectstatic: .venv or manage.py not found." -ForegroundColor Yellow
+    $skipped += "collectstatic (skipped: missing .venv or manage.py)"
 }
+
 
 
 # -------------------------------------------------
