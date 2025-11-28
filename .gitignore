@@ -7,15 +7,6 @@ __pycache__/
 *.pkl
 *.log
 
-# Virtual environment
-.venv/
-env/
-venv/
-
-# Local settings / environment files
-.env
-*.env
-
 # Bytecode cache
 *.egg-info/
 .eggs/
@@ -38,9 +29,6 @@ db.sqlite3-journal
 */migrations/__pycache__/
 */migrations/*.pyc
 
-# ===== IDE / EDITOR =====
-# VS Code
-.vscode/
 
 # PyCharm
 .idea/
