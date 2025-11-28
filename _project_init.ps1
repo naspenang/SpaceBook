@@ -1504,9 +1504,40 @@ else {
     $skipped += "website/home.html (already exists)"
 }
 
+# -------------------------------------------------
+# 10. Download default logo into website/static/images/logo.png
+# -------------------------------------------------
+Write-Host ""
+Write-Host "Ensuring default logo.png exists in website/static/images/..." -ForegroundColor Yellow
+
+$staticImagesDir = ".\website\static\images"
+$logoPath = Join-Path $staticImagesDir "logo.png"
+$logoUrl = "https://raw.githubusercontent.com/naspenang/pub-static/refs/heads/main/nologo.png"
+
+if (-not (Test-Path $staticImagesDir)) {
+    New-Item -ItemType Directory -Path $staticImagesDir -Force | Out-Null
+}
+
+if (-not (Test-Path $logoPath)) {
+    try {
+        Write-Host "Downloading default logo from $logoUrl ..." -ForegroundColor Yellow
+        Invoke-WebRequest -Uri $logoUrl -OutFile $logoPath -UseBasicParsing
+        Write-Host "Default logo saved to $logoPath" -ForegroundColor Green
+        $created += "website/static/images/logo.png (downloaded)"
+    }
+    catch {
+        Write-Host "WARNING: Failed to download default logo: $($_.Exception.Message)" -ForegroundColor Red
+        $skipped += "website/static/images/logo.png (download failed)"
+    }
+}
+else {
+    Write-Host "logo.png already exists in website/static/images, not overwriting." -ForegroundColor Yellow
+    $skipped += "website/static/images/logo.png (already exists)"
+}
+
 
 # -------------------------------------------------
-# 10. VS Code .vscode/launch.json and tasks.json
+# 11. VS Code .vscode/launch.json and tasks.json
 # -------------------------------------------------
 Write-Host ""
 Write-Host "Ensuring VS Code .vscode/ files exist..." -ForegroundColor Yellow
@@ -1699,7 +1730,7 @@ else {
 
 
 # -------------------------------------------------
-# 11. Update project urls.py to point root URL ('/') to website app
+# 12. Update project urls.py to point root URL ('/') to website app
 # -------------------------------------------------
 Write-Host ""
 Write-Host "Updating project urls.py to point root URL ('/') to website app..." -ForegroundColor Yellow
@@ -1751,7 +1782,7 @@ else {
 }
 
 # -------------------------------------------------
-# 12. Copy _setup.blank to every app folder as _setup.py (if present)
+# 13. Copy _setup.blank to every app folder as _setup.py (if present)
 # -------------------------------------------------
 $sourceFile = "_setup.blank"
 
@@ -1773,7 +1804,24 @@ else {
 }
 
 # -------------------------------------------------
-# 13. Summary of created/skipped files
+# 12.5 Run collectstatic (safe mode)
+# -------------------------------------------------
+Write-Host ""
+Write-Host "Running 'python manage.py collectstatic --noinput'..." -ForegroundColor Yellow
+
+try {
+    python manage.py collectstatic --noinput
+    Write-Host "Static files collected successfully." -ForegroundColor Green
+    $created += "Static files collected (collectstatic)"
+}
+catch {
+    Write-Host "WARNING: collectstatic failed: $($_.Exception.Message)" -ForegroundColor Red
+    $skipped += "collectstatic (failed)"
+}
+
+
+# -------------------------------------------------
+# 14. Summary of created/skipped files
 # -------------------------------------------------
 Write-Host ""
 Write-Host "Summary:" -ForegroundColor Cyan
