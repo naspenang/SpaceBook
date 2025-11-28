@@ -217,7 +217,10 @@ if (-not (Test-Path $navPath)) {
     @"
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">Website</a>
+    <a class="navbar-brand" href="/">
+      <img src="/media/logo.png" style="height: 40px; margin-top: -5px" />
+      $projectName
+    </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
       <span class="navbar-toggler-icon"></span>
     </button>

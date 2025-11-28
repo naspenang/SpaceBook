@@ -90,6 +90,7 @@ def ensure_views_file():
             f.write("from django.shortcuts import render\n\n" + content)
         print(c("✔ Added 'render' import to views.py", GREEN))
 
+
 def strip_bom(filepath):
     """Remove UTF-8 BOM (U+FEFF) if present in a file."""
     if not os.path.exists(filepath):
@@ -102,6 +103,7 @@ def strip_bom(filepath):
     # write it back as normal UTF-8 with no BOM
     with open(filepath, "w", encoding="utf-8") as f:
         f.write(data)
+
 
 def ensure_urls_file():
     """Ensure urls.py exists, is clean (no BOM), and contains 'from . import views'."""
@@ -138,7 +140,6 @@ def ensure_urls_file():
         print("✔ Added 'from . import views' to urls.py")
 
 
-
 def ensure_nav_template():
     """Create templates/<app>/nav.html if missing."""
     os.makedirs(TEMPLATES_DIR, exist_ok=True)
@@ -148,14 +149,17 @@ def ensure_nav_template():
 
     with open(NAV_FILE, "w") as f:
         f.write(
-            "<nav class=\"navbar navbar-expand-lg navbar-dark bg-dark mb-4\">\n"
-            "  <div class=\"container-fluid\">\n"
-            f"    <a class=\"navbar-brand\" href=\"#\">{APP_NAME.title()}</a>\n"
-            "    <button class=\"navbar-toggler\" type=\"button\" data-bs-toggle=\"collapse\" data-bs-target=\"#mainNav\">\n"
-            "      <span class=\"navbar-toggler-icon\"></span>\n"
+            '<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">\n'
+            '  <div class="container-fluid">\n'
+            '  <a class="navbar-brand" href="/">'
+            f'<img src="/media/logo.png" style="height: 40px; margin-top: -5px" />'
+            f"    {APP_NAME.title()}"
+            "    </a>"
+            '    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">\n'
+            '      <span class="navbar-toggler-icon"></span>\n'
             "    </button>\n"
-            "    <div class=\"collapse navbar-collapse\" id=\"mainNav\">\n"
-            "      <ul class=\"navbar-nav ms-auto mb-2 mb-lg-0\">\n"
+            '    <div class="collapse navbar-collapse" id="mainNav">\n'
+            '      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">\n'
             "        <!-- AUTO-GENERATED NAV START -->\n"
             "        <!-- items will be injected by menu.py -->\n"
             "        <!-- AUTO-GENERATED NAV END -->\n"
@@ -167,6 +171,7 @@ def ensure_nav_template():
 
     print(c(f"✔ Created nav template: {NAV_FILE}", GREEN))
 
+
 def ensure_footer_template():
     """Create templates/<app>/footer.html if missing."""
     os.makedirs(TEMPLATES_DIR, exist_ok=True)
@@ -176,8 +181,8 @@ def ensure_footer_template():
 
     with open(FOOTER_FILE, "w") as f:
         f.write(
-            "<footer class=\"bg-dark text-white text-center py-3 mt-5\">\n"
-            "  <div class=\"container\">\n"
+            '<footer class="bg-dark text-white text-center py-3 mt-5">\n'
+            '  <div class="container">\n'
             "    <small>&copy; 2025 Your Project Name. All rights reserved.</small>\n"
             "  </div>\n"
             "</footer>\n"
@@ -196,10 +201,10 @@ def ensure_base_template():
     ensure_nav_template()
     ensure_footer_template()
 
-    include_nav_double = f"{{% include \"{APP_NAME}/nav.html\" %}}"
+    include_nav_double = f'{{% include "{APP_NAME}/nav.html" %}}'
     include_nav_single = f"{{% include '{APP_NAME}/nav.html' %}}"
 
-    include_footer_double = f"{{% include \"{APP_NAME}/footer.html\" %}}"
+    include_footer_double = f'{{% include "{APP_NAME}/footer.html" %}}'
     include_footer_single = f"{{% include '{APP_NAME}/footer.html' %}}"
 
     if not os.path.exists(BASE_TEMPLATE):
@@ -215,11 +220,11 @@ def ensure_base_template():
                 "    <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css' rel='stylesheet'>\n"
                 "</head>\n"
                 "<body class='bg-light'>\n"
-                f"    {{% include \"{APP_NAME}/nav.html\" %}}\n"
+                f'    {{% include "{APP_NAME}/nav.html" %}}\n'
                 "    <div class='container my-4'>\n"
                 "        {% block content %}{% endblock %}\n"
                 "    </div>\n"
-                f"    {{% include \"{APP_NAME}/footer.html\" %}}\n"
+                f'    {{% include "{APP_NAME}/footer.html" %}}\n'
                 "    <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js'></script>\n"
                 "</body>\n"
                 "</html>\n"
@@ -233,13 +238,15 @@ def ensure_base_template():
         content = f.read()
 
     nav_present = include_nav_double in content or include_nav_single in content
-    footer_present = include_footer_double in content or include_footer_single in content
+    footer_present = (
+        include_footer_double in content or include_footer_single in content
+    )
 
     lines = content.splitlines(keepends=True)
     changed = False
 
     if not nav_present:
-        include_line = f"    {{% include \"{APP_NAME}/nav.html\" %}}\n"
+        include_line = f'    {{% include "{APP_NAME}/nav.html" %}}\n'
         inserted = False
 
         for i, line in enumerate(lines):
@@ -255,7 +262,7 @@ def ensure_base_template():
         print(c("✔ Updated base.html to include nav.html", GREEN))
 
     if not footer_present:
-        footer_line = f"    {{% include \"{APP_NAME}/footer.html\" %}}\n"
+        footer_line = f'    {{% include "{APP_NAME}/footer.html" %}}\n'
         inserted = False
 
         # Try to insert before closing </body> or before the JS script
@@ -304,7 +311,6 @@ def create_view(page_name: str):
     print(c(f"✔ Added view function '{view_name}()' to views.py", GREEN))
 
 
-
 def create_template(page_name: str):
     ensure_base_template()
 
@@ -321,7 +327,11 @@ def create_template(page_name: str):
     with open(path, "w") as f:
         f.write(
             "{% extends '" + APP_NAME + "/base.html' %}\n\n"
-            "{% block title %}" + nice_title + " | " + APP_NAME.title() + "{% endblock %}\n\n"
+            "{% block title %}"
+            + nice_title
+            + " | "
+            + APP_NAME.title()
+            + "{% endblock %}\n\n"
             "{% block content %}\n"
             f"    <h1>{nice_title}</h1>\n"
             "    <p>This page was generated automatically by <code>menu.py</code>.</p>\n"
@@ -329,7 +339,6 @@ def create_template(page_name: str):
         )
 
     print(c(f"✔ Created template: {path}", GREEN))
-
 
 
 def create_url(page_name: str):
@@ -359,13 +368,14 @@ def create_url(page_name: str):
     print(c(f"✔ Added URL route for '{page_name}' → /{url_path}/", GREEN))
 
 
-
 # -----------------------------
 #  DELETE PAGE (INLINE)
 # -----------------------------
 def delete_view(page_name: str):
     if not os.path.exists(VIEW_FILE):
-        print(c(f"⚠ views.py not found, skipping view removal for '{page_name}'.", YELLOW))
+        print(
+            c(f"⚠ views.py not found, skipping view removal for '{page_name}'.", YELLOW)
+        )
         return
 
     with open(VIEW_FILE, "r") as f:
@@ -416,7 +426,9 @@ def delete_template(page_name: str):
 def delete_url(page_name: str):
     strip_bom(URLS_FILE)
     if not os.path.exists(URLS_FILE):
-        print(c(f"⚠ urls.py not found, skipping URL removal for '{page_name}'.", YELLOW))
+        print(
+            c(f"⚠ urls.py not found, skipping URL removal for '{page_name}'.", YELLOW)
+        )
         return
 
     with open(URLS_FILE, "r") as f:
@@ -463,7 +475,9 @@ def get_pages():
                 continue
 
             full_path = os.path.join(root, f)
-            rel_path = os.path.relpath(full_path, TEMPLATES_DIR)  # e.g. 'reports/monthly.html'
+            rel_path = os.path.relpath(
+                full_path, TEMPLATES_DIR
+            )  # e.g. 'reports/monthly.html'
             rel_no_ext = rel_path[:-5]  # remove '.html'
             page_id = rel_no_ext.replace(os.sep, "/")
 
@@ -536,19 +550,19 @@ def update_navigation():
             handled.add(prefix)
             singles.discard(prefix)
 
-        lines.append("        <li class=\"nav-item dropdown\">\n")
+        lines.append('        <li class="nav-item dropdown">\n')
         lines.append(
-            f"          <a class=\"nav-link dropdown-toggle\" href=\"#\" role=\"button\" "
-            f"data-bs-toggle=\"dropdown\" aria-expanded=\"false\">{title_from(prefix)}</a>\n"
+            f'          <a class="nav-link dropdown-toggle" href="#" role="button" '
+            f'data-bs-toggle="dropdown" aria-expanded="false">{title_from(prefix)}</a>\n'
         )
-        lines.append("          <ul class=\"dropdown-menu dropdown-menu-end\">\n")
+        lines.append('          <ul class="dropdown-menu dropdown-menu-end">\n')
 
         # Root page /prefix/
         if has_root:
             slug = url_path_from_page(prefix)
             label = title_from(prefix)
             lines.append(
-                f"            <li><a class=\"dropdown-item\" href=\"/{slug}/\">{label}</a></li>\n"
+                f'            <li><a class="dropdown-item" href="/{slug}/">{label}</a></li>\n'
             )
 
         # Child pages /prefix/.../
@@ -559,7 +573,7 @@ def update_navigation():
             suffix = p.split("/")[-1]
             label = title_from(suffix)
             lines.append(
-                f"            <li><a class=\"dropdown-item\" href=\"/{slug}/\">{label}</a></li>\n"
+                f'            <li><a class="dropdown-item" href="/{slug}/">{label}</a></li>\n'
             )
 
         lines.append("          </ul>\n")
@@ -572,7 +586,7 @@ def update_navigation():
         slug = url_path_from_page(page)
         label = title_from(page.split("/")[-1])
         lines.append(
-            f"        <li class=\"nav-item\"><a class=\"nav-link\" href=\"/{slug}/\">{label}</a></li>\n"
+            f'        <li class="nav-item"><a class="nav-link" href="/{slug}/">{label}</a></li>\n'
         )
 
     lines.append("        <!-- AUTO-GENERATED NAV END -->\n")
@@ -624,7 +638,12 @@ def run_createpages():
     for name in raw_names:
         page_id = normalise_page_id(name)
         if not valid_page_id(page_id):
-            print(c(f"❌ Invalid page name '{name}'. Use letters, numbers, underscores and '/'.", RED))
+            print(
+                c(
+                    f"❌ Invalid page name '{name}'. Use letters, numbers, underscores and '/'.",
+                    RED,
+                )
+            )
             continue
         if page_id not in seen:
             seen.add(page_id)
@@ -645,7 +664,6 @@ def run_createpages():
 
     update_navigation()
     print(c("🎉 All selected pages created successfully!\n", GREEN))
-
 
 
 def run_deletepages():
@@ -801,7 +819,11 @@ def rename_in_urls(old: str, new: str):
     for line in lines:
         original = line
 
-        if f"views.{old_view}" in line or f"name='{old_view}'" in line or f"'{old_url}/'" in line:
+        if (
+            f"views.{old_view}" in line
+            or f"name='{old_view}'" in line
+            or f"'{old_url}/'" in line
+        ):
             line = line.replace(f"views.{old_view}", f"views.{new_view}")
             line = line.replace(f"name='{old_view}'", f"name='{new_view}'")
             line = line.replace(f"'{old_url}/'", f"'{new_url}/'")
@@ -859,14 +881,21 @@ def run_rename_page():
         return
 
     if not valid_page_name(new):
-        print(c("❌ Invalid new page name. Use letters, numbers, underscores; start with a letter.\n", RED))
+        print(
+            c(
+                "❌ Invalid new page name. Use letters, numbers, underscores; start with a letter.\n",
+                RED,
+            )
+        )
         return
 
     if old == new:
         print(c("Old and new names are the same, nothing to do.\n", YELLOW))
         return
 
-    print(f"\nRenaming page {c(old, CYAN)} → {c(new, CYAN)} in app {c(APP_NAME, BOLD)}...\n")
+    print(
+        f"\nRenaming page {c(old, CYAN)} → {c(new, CYAN)} in app {c(APP_NAME, BOLD)}...\n"
+    )
     rename_in_views(old, new)
     rename_in_template(old, new)
     rename_in_urls(old, new)
