@@ -7,14 +7,21 @@ __pycache__/
 *.pkl
 *.log
 
+# Virtual environments
+venv/
+.venv/
+.env
+env/
+ENV/
+
 # Bytecode cache
 *.egg-info/
 .eggs/
 
 # ===== DJANGO =====
 # SQLite database (only ignore if you don’t want it in repo)
-db.sqlite3
-db.sqlite3-journal
+*.sqlite3
+*.sqlite3-journal
 
 # Django collected static files
 /staticfiles/
