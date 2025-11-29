@@ -63,8 +63,15 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": BASE_DIR / "db.sqlite3",
-    }
+    },
+    "main": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "main.db",
+    },
 }
+
+
+DATABASE_ROUTERS = ["website.db_router.MainRouter"]
 
 
 # Password validation
