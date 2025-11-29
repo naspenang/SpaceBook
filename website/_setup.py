@@ -18,7 +18,7 @@ FOOTER_FILE = os.path.join(TEMPLATES_DIR, "footer.html")
 
 
 # Pages that cannot be deleted or renamed
-PROTECTED_PAGES = {"home", "nav", "footer", "sidebar"}
+PROTECTED_PAGES = {"home", "nav", "footer", "sidebar", "profile"}
 
 
 # -----------------------------
@@ -375,7 +375,10 @@ def create_url(page_name: str):
 def delete_view(page_name: str):
     if not os.path.exists(VIEW_FILE):
         print(
-            c(f"âš  views.py not found, skipping view removal for '{page_name}'.", YELLOW)
+            c(
+                f"âš  views.py not found, skipping view removal for '{page_name}'.",
+                YELLOW,
+            )
         )
         return
 

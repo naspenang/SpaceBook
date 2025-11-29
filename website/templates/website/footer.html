@@ -1,5 +1,41 @@
-﻿<footer class="bg-dark text-white text-center py-3 mt-5">
-  <div class="container">
-    <small>&copy; 2025 Your Project Name. All rights reserved.</small>
+﻿{% load static %}
+<footer class="bg-dark text-white py-4 mt-5">
+  <div class="container text-center">
+
+    <!-- UITM LOGO (optional asset) -->
+    <div class="bg-white d-inline-block" style="padding: 8px 8px 0px 8px; border-radius: 8px; margin-bottom: 2px;">
+      <img src="{% static 'images/uitm-logo.png' %}"
+           alt="UiTM Logo"
+           class="mb-3"
+           style="height: 42px; width: auto;">
+    </div>
+
+    <!-- PROJECT NAME -->
+    <h6 class="fw-bold mb-1">SpaceBook – UiTM Library Booking System</h6>
+
+    <!-- CAMPUS / FACULTY INFO -->
+    <small class="d-block text-muted mb-2" style="color: #bbbbbb !important;">
+      Developed for IML208 – Programming for Libraries · Universiti Teknologi MARA
+    </small>
+
+    <!-- GROUP MEMBERS -->
+    <div class="text-white-50 small mb-3" style="line-height: 1.4;">
+      <div><strong>Project Team (KCDIM1443E)</strong></div>
+      <div>Muhamad Nasrul Bin Hussain - 2024620964</div>
+      <div>Nur Farah Izni Binti Kharuazman - 2024279646</div>
+      <div>Rizq Syahmi Bin Muhammad Fuad - 2024295574</div>
+      <div>Syarifah Iklil Adlina Binti Syed Khairil Imran - 2024400574</div>
+    </div>
+
+    <!-- VERSION FROM CHANGELOG (v1.0.0) -->
+    <small class="d-block text-white-50 mb-2">
+      Version 1.0.0
+    </small>
+
+    <!-- COPYRIGHT -->
+    <small class="text-white-50">
+      © 2025 SpaceBook. All rights reserved.
+    </small>
+
   </div>
 </footer>

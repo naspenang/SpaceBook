@@ -1,6 +1,8 @@
 ﻿{% load static %}
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-0">
   <div class="container-fluid">
+
+    <!-- BRAND / LOGO -->
     <a class="navbar-brand" href="/">
       <img
         src="{% static 'images/logo.png' %}"
@@ -10,6 +12,7 @@
       SpaceBook
     </a>
 
+    <!-- MOBILE MENU BUTTON -->
     <button
       class="navbar-toggler"
       type="button"
@@ -19,11 +22,21 @@
       <span class="navbar-toggler-icon"></span>
     </button>
 
+    <!-- NAV CONTENT -->
     <div class="collapse navbar-collapse" id="mainNav">
+
+      <!-- LEFT SIDE MENU -->
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <!-- AUTO-GENERATED NAV START -->
+        <li class="nav-item"><a class="nav-link" href="/about/">About</a></li>
+        <!-- AUTO-GENERATED NAV END -->
+      </ul>
+
+      <!-- RIGHT SIDE: PROFILE / LOGIN -->
       <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
 
         {% if user.is_authenticated %}
-          <!-- Profile dropdown when logged in -->
+          <!-- PROFILE DROPDOWN -->
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle"
               href="#"
@@ -34,8 +47,8 @@
 
               {% if google_picture %}
                 <img src="{{ google_picture }}"
-                    class="rounded-circle me-2"
-                    style="width:32px; height:32px; object-fit:cover; border:2px solid #fff;">
+                     class="rounded-circle me-2"
+                     style="width:32px; height:32px; object-fit:cover; border:2px solid #fff;">
               {% else %}
                 <i class="bi bi-person-circle me-1"></i>
               {% endif %}
@@ -56,17 +69,19 @@
               </li>
             </ul>
           </li>
+
         {% else %}
-          <!-- Google login button -->
+          <!-- GOOGLE LOGIN BUTTON -->
           <li class="nav-item">
             <a class="nav-link"
-              href="{% url 'social:begin' 'google-oauth2' %}?next={{ request.get_full_path|urlencode }}">
+               href="{% url 'social:begin' 'google-oauth2' %}?next={{ request.get_full_path|urlencode }}">
               Login with Google
             </a>
           </li>
         {% endif %}
 
       </ul>
+
     </div>
   </div>
 </nav>

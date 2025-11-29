@@ -1,0 +1,305 @@
+{% extends 'website/base.html' %}
+{% load static %}
+
+{% block title %}About | SpaceBook{% endblock %}
+
+{% block content %}
+
+<!-- Simple page-only animation styles -->
+<style>
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .fade-in {
+    opacity: 0;
+    animation: fadeInUp 0.65s ease-out forwards;
+  }
+
+  .fade-in.delay-1 { animation-delay: 0.1s; }
+  .fade-in.delay-2 { animation-delay: 0.2s; }
+  .fade-in.delay-3 { animation-delay: 0.3s; }
+  .fade-in.delay-4 { animation-delay: 0.4s; }
+  .fade-in.delay-5 { animation-delay: 0.5s; }
+</style>
+
+
+
+
+<div class="container py-5" style="max-width: 950px;">
+
+<img src="{% static 'images/logo-r.png' %}"
+     class="fade-in delay-2"
+     style="width: 400px; object-fit: cover; display: block; margin: 0 auto 0 auto;"
+     alt="Featured banner">
+     <h1 class="mb-3 text-center fw-bold">SpaceBook</h1>
+
+  <!-- MAIN INTRO -->
+  <div class="fade-in delay-2">
+    <p class="lead text-center mb-4">
+      SpaceBook is UiTM’s library room booking system - built so students and staff can
+      book study rooms without running to the counter every time.
+    </p>
+
+    <p style="text-align: justify;">
+      Users sign in with their UiTM Google accounts, browse branches, see which rooms are
+      available, and create bookings that follow the library’s rules. Behind the scenes,
+      the system runs on Django with two SQLite databases: one for accounts and login,
+      and another one for all the library and booking data. It keeps things organised and
+      makes the logic easier to manage.
+    </p>
+  </div>
+
+  <!-- FEATURES SECTION -->
+  <div class="fade-in delay-3">
+    <h3 class="mt-5 mb-3 text-center">What SpaceBook Can Do</h3>
+  </div>
+
+  <div class="row g-4 fade-in delay-3">
+
+    <div class="col-md-4">
+      <div class="card shadow-sm border-0 h-100 text-center p-3">
+        <div class="fs-2 mb-2">🔐</div>
+        <h5 class="fw-semibold">Google Login</h5>
+        <p class="text-muted small mb-0">
+          Sign in with UiTM Google accounts. No extra passwords to remember.
+        </p>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card shadow-sm border-0 h-100 text-center p-3">
+        <div class="fs-2 mb-2">📅</div>
+        <h5 class="fw-semibold">Real-Time Availability</h5>
+        <p class="text-muted small mb-0">
+          See which rooms are free or booked on the spot.
+        </p>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card shadow-sm border-0 h-100 text-center p-3">
+        <div class="fs-2 mb-2">🚫</div>
+        <h5 class="fw-semibold">No Overlaps</h5>
+        <p class="text-muted small mb-0">
+          The system blocks overlapping bookings automatically.
+        </p>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card shadow-sm border-0 h-100 text-center p-3">
+        <div class="fs-2 mb-2">📝</div>
+        <h5 class="fw-semibold">Approval Flow</h5>
+        <p class="text-muted small mb-0">
+          Some spaces need librarian approval — requests can be accepted or rejected.
+        </p>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card shadow-sm border-0 h-100 text-center p-3">
+        <div class="fs-2 mb-2">📊</div>
+        <h5 class="fw-semibold">Reports</h5>
+        <p class="text-muted small mb-0">
+          Totals, averages, and usage patterns so the library can see how spaces are used.
+        </p>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card shadow-sm border-0 h-100 text-center p-3">
+        <div class="fs-2 mb-2">💳</div>
+        <h5 class="fw-semibold">Payment Logs</h5>
+        <p class="text-muted small mb-0">
+          Tracks payments for certain rooms via the Bank Interface role.
+        </p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ICONS / GALLERY ROW (STYLE GALLERY) -->
+  <div class="fade-in delay-4">
+    <h3 class="mt-5 mb-3 text-center">Types of Spaces</h3>
+    <p class="text-center text-muted small mb-4">
+      SpaceBook can handle different kinds of rooms in the library.
+    </p>
+  </div>
+
+  <div class="row g-3 text-center fade-in delay-4">
+    <div class="col-6 col-md-3">
+      <div class="border rounded-3 p-3 h-100">
+        <div class="fs-2 mb-1">🤫</div>
+        <div class="small fw-semibold">Silent Study</div>
+        <div class="text-muted small">For quiet individual work.</div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="border rounded-3 p-3 h-100">
+        <div class="fs-2 mb-1">💬</div>
+        <div class="small fw-semibold">Discussion Rooms</div>
+        <div class="text-muted small">Group work & meetings.</div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="border rounded-3 p-3 h-100">
+        <div class="fs-2 mb-1">🎥</div>
+        <div class="small fw-semibold">Media Rooms</div>
+        <div class="text-muted small">Presentations & recordings.</div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="border rounded-3 p-3 h-100">
+        <div class="fs-2 mb-1">🖥️</div>
+        <div class="small fw-semibold">PC Zones</div>
+        <div class="text-muted small">Computer-based research.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOW SPACEBOOK WORKS (DIAGRAM STYLE SECTION) -->
+  <div class="fade-in delay-4">
+    <h3 class="mt-5 mb-3 text-center">How SpaceBook Works</h3>
+    <p class="text-center text-muted small mb-4">
+      A simple flow from logging in to using your booked room.
+    </p>
+  </div>
+
+  <div class="row g-4 justify-content-center fade-in delay-4">
+    <div class="col-md-3">
+      <div class="card border-0 shadow-sm h-100 text-center p-3">
+        <div class="badge bg-primary rounded-pill mb-2 mx-auto" style="width: 32px;">1</div>
+        <h6 class="fw-semibold">Log In</h6>
+        <p class="small text-muted mb-0">
+          User signs in with their UiTM Google account.
+        </p>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card border-0 shadow-sm h-100 text-center p-3">
+        <div class="badge bg-primary rounded-pill mb-2 mx-auto" style="width: 32px;">2</div>
+        <h6 class="fw-semibold">Choose Branch & Space</h6>
+        <p class="small text-muted mb-0">
+          The user picks a library branch and a room that fits their group.
+        </p>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card border-0 shadow-sm h-100 text-center p-3">
+        <div class="badge bg-primary rounded-pill mb-2 mx-auto" style="width: 32px;">3</div>
+        <h6 class="fw-semibold">Select Time</h6>
+        <p class="small text-muted mb-0">
+          The system checks the date & time, avoids overlaps and closures.
+        </p>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card border-0 shadow-sm h-100 text-center p-3">
+        <div class="badge bg-primary rounded-pill mb-2 mx-auto" style="width: 32px;">4</div>
+        <h6 class="fw-semibold">Confirm & Track</h6>
+        <p class="small text-muted mb-0">
+          Booking is created. The user can see its status and details.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- USER ROLES -->
+  <div class="fade-in delay-5">
+    <h3 class="mt-5 mb-3 text-center">Who Uses the System?</h3>
+  </div>
+
+  <ul class="fade-in delay-5">
+    <li><strong>Students & Staff</strong> – Make and manage their own bookings.</li>
+    <li><strong>Librarians</strong> – Approve or reject bookings, manage spaces, set closures.</li>
+    <li><strong>Admins</strong> – Set up branches, handle settings, and view full reports.</li>
+    <li><strong>UiTM Management</strong> – View analytics and summaries only.</li>
+    <li><strong>Bank Interface Users</strong> – Update payment status for specific bookings.</li>
+  </ul>
+
+  <!-- PROJECT BACKGROUND + DOCS CARD ROW -->
+  <div class="row g-4 mt-4 fade-in delay-5">
+    <div class="col-md-7">
+      <h3 class="mb-3">Project Background</h3>
+      <p style="text-align: justify;">
+        SpaceBook was developed for the IML208 Programming for Libraries course. The project
+        includes CRUD features, loops, conditions, totals, averages, booking rules, and full
+        documentation. It follows real UiTM library workflows so it doesn’t feel like just a
+        “demo”, but something that could actually be used.
+      </p>
+    </div>
+
+    <div class="col-md-5">
+      <div class="card shadow-sm border-0 h-100">
+        <div class="card-body d-flex flex-column">
+          <h5 class="fw-semibold mb-2 text-center">Read the Docs</h5>
+          <p class="small text-muted text-center">
+            Extra details and technical notes are stored in the project documentation.
+          </p>
+          <!-- TODO: Update these URLs to your real GitHub repo paths -->
+          <div class="d-flex flex-column gap-2 mt-2">
+            <a href="https://github.com/naspenang/spacebook" 
+               target="_blank" 
+               class="btn btn-outline-primary btn-sm">
+              🔗 GitHub Repository
+            </a>
+            <a href="https://github.com/your-username/spacebook/blob/main/FAQ.md" 
+               target="_blank" 
+               class="btn btn-outline-secondary btn-sm">
+              ❓ FAQ
+            </a>
+            <a href="https://github.com/your-username/spacebook/blob/main/FEATURES.md" 
+               target="_blank" 
+               class="btn btn-outline-secondary btn-sm">
+              ⭐ Features
+            </a>
+            <a href="https://github.com/your-username/spacebook/blob/main/CHANGELOG.md" 
+               target="_blank" 
+               class="btn btn-outline-secondary btn-sm">
+              📝 Changelog
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TEAM SECTION -->
+  <div class="fade-in delay-5">
+    <h3 class="mt-5 mb-3 text-center">Project Team</h3>
+  </div>
+
+  <div class="row g-4 justify-content-center fade-in delay-5">
+    <div class="col-md-7 col-lg-6">
+      <div class="card shadow-sm border-0 h-100 p-3">
+        <h5 class="fw-semibold mb-3 text-center">IML208 Group Members</h5>
+        <ul class="small mb-0">
+          <li>Muhamad Nasrul Bin Hussain — 2024620964</li>
+          <li>Nur Farah Izni Binti Kharuazman — 2024279646</li>
+          <li>Rizq Syahmi Bin Muhammad Fuad — 2024295574</li>
+          <li>Syarifah Iklil Adlina Binti Syed Khairil Imran — 2024400574</li>
+        </ul>
+        <p class="text-muted small mt-3 text-center">
+          Group KCDIM1443E • IML208 – Programming for Libraries
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <p class="text-muted small text-center mt-5 fade-in delay-5">
+    SpaceBook is still growing — new features will be added as development continues.
+  </p>
+
+</div>
+{% endblock %}
