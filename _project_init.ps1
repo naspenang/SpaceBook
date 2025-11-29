@@ -50,87 +50,6 @@ $created = @()
 $skipped = @()
 
 # -------------------------------------------------
-# Function to fix WSGI_APPLICATION and ROOT_URLCONF in settings.py
-# -------------------------------------------------
-function Fix-ProjectSettings {
-    param(
-        [string]$SettingsPath,
-        [string]$ProjectName
-    )
-
-    if (-not (Test-Path $SettingsPath)) {
-        Write-Host "settings.py not found at $SettingsPath, skipping WSGI/ROOT_URLCONF fix." -ForegroundColor Yellow
-        return
-    }
-
-    Write-Host ""
-    Write-Host "Checking WSGI_APPLICATION and ROOT_URLCONF in settings.py..." -ForegroundColor Yellow
-
-    $expectedModule = "${ProjectName}_project"
-    $expectedWsgi = "${expectedModule}.wsgi.application"
-    $expectedRoot = "${expectedModule}.urls"
-
-    $settingsLines = Get-Content $SettingsPath
-    $settingsChanged = $false
-
-    $foundWsgi = $false
-    $foundRoot = $false
-
-    for ($i = 0; $i -lt $settingsLines.Length; $i++) {
-        $line = $settingsLines[$i]
-
-        # ---- WSGI_APPLICATION ----
-        if ($line -match '^\s*WSGI_APPLICATION\s*=') {
-            $foundWsgi = $true
-
-            if ($line -match [regex]::Escape($expectedWsgi)) {
-                Write-Host "WSGI_APPLICATION already correct ($expectedWsgi)." -ForegroundColor Green
-            }
-            else {
-                Write-Host "WSGI_APPLICATION mismatch detected. Fixing to '$expectedWsgi'..." -ForegroundColor Magenta
-                $settingsLines[$i] = "WSGI_APPLICATION = '$expectedWsgi'"
-                $settingsChanged = $true
-            }
-        }
-
-        # ---- ROOT_URLCONF ----
-        if ($line -match '^\s*ROOT_URLCONF\s*=') {
-            $foundRoot = $true
-
-            if ($line -match [regex]::Escape($expectedRoot)) {
-                Write-Host "ROOT_URLCONF already correct ($expectedRoot)." -ForegroundColor Green
-            }
-            else {
-                Write-Host "ROOT_URLCONF mismatch detected. Fixing to '$expectedRoot'..." -ForegroundColor Magenta
-                $settingsLines[$i] = "ROOT_URLCONF = '$expectedRoot'"
-                $settingsChanged = $true
-            }
-        }
-    }
-
-    if (-not $foundWsgi) {
-        Write-Host "WSGI_APPLICATION not found in settings.py. Adding it..." -ForegroundColor Red
-        $settingsLines += "WSGI_APPLICATION = '$expectedWsgi'"
-        $settingsChanged = $true
-    }
-
-    if (-not $foundRoot) {
-        Write-Host "ROOT_URLCONF not found in settings.py. Adding it..." -ForegroundColor Red
-        $settingsLines += "ROOT_URLCONF = '$expectedRoot'"
-        $settingsChanged = $true
-    }
-
-    if ($settingsChanged) {
-        $settingsLines | Set-Content $SettingsPath -Encoding utf8
-        Write-Host "settings.py updated with correct WSGI_APPLICATION and ROOT_URLCONF." -ForegroundColor Green
-    }
-    else {
-        Write-Host "No changes needed for WSGI_APPLICATION / ROOT_URLCONF." -ForegroundColor Yellow
-    }
-}
-
-
-# -------------------------------------------------
 # 0. Create requirements.txt (plain text) if missing
 # -------------------------------------------------
 $requirementsPath = ".\requirements.txt"
@@ -1214,15 +1133,9 @@ $templatesOk = (Test-Path $baseCheck) -and (Test-Path $navCheck) -and (Test-Path
 if ($venvExists -and $manageExists -and $websiteExists -and $vscodeExists -and $workspaceExists -and $templatesOk) {
     Write-Host ""
     Write-Host "Detected existing virtual environment, Django project and 'website' app." -ForegroundColor Green
-
-    # run the fixer even on re-runs
-    $quickSettingsPath = ".\${projectName}_project\settings.py"
-    Fix-ProjectSettings -SettingsPath $quickSettingsPath -ProjectName $projectName
-
-    Write-Host "Everything already set up. Nothing else to do. Exiting _project_init.ps1." -ForegroundColor Green
+    Write-Host "Everything already set up. Nothing to do. Exiting _project_init.ps1." -ForegroundColor Green
     exit 0
 }
-
 
 # -------------------------------------------------
 # 0.4 If .venv does NOT exist: create + install from requirements.txt
@@ -1305,8 +1218,6 @@ else {
 $settingsPath = ".\${projectName}_project\settings.py"
 $urlsPath = ".\${projectName}_project\urls.py"
 
-Fix-ProjectSettings -SettingsPath $settingsPath -ProjectName $projectName
-
 if (!(Test-Path $settingsPath) -or !(Test-Path $urlsPath)) {
     Write-Host "ERROR: Could not find ${projectName}_project/settings.py or urls.py" -ForegroundColor Red
     $skipped += "Django project (missing settings.py or urls.py)"
@@ -1388,7 +1299,6 @@ else {
     Write-Host "APP_DIRS already set to True." -ForegroundColor Yellow
     $skipped += "APP_DIRS already set to True"
 }
-
 
 # -------------------------------------------------
 # 7. Ensure website/views.py exists AND has a home() view
@@ -1500,7 +1410,7 @@ if (-not (Test-Path $navPath)) {
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
   <div class="container-fluid">
     <a class="navbar-brand" href="/">
-      <img src="{ % static 'images/logo.png' % }" style="height: 40px; margin-top: -5px" />
+      <img src="{% static 'images/logo.png' %}" style="height: 40px; margin-top: -5px" />
       {{PROJECT_NAME}}
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
@@ -1515,7 +1425,7 @@ if (-not (Test-Path $navPath)) {
   </div>
 </nav>
 '@
-    $navHtml = $navHtml.Replace("{ { PROJECT_NAME } }", $projectName)
+    $navHtml = $navHtml.Replace("{{PROJECT_NAME}}", $projectName)
     $navHtml | Set-Content $navPath -Encoding utf8
     Write-Host "Created website/nav.html" -ForegroundColor Green
     $created += "website/nav.html (created)"
@@ -1584,7 +1494,7 @@ if (-not (Test-Path $homePath)) {
 </div>
 {% endblock %}
 '@
-    $homeHtml = $homeHtml.Replace("{ { PROJECT_NAME } }", $folderName)
+    $homeHtml = $homeHtml.Replace("{{PROJECT_NAME}}", $folderName)
     $homeHtml | Set-Content $homePath -Encoding utf8
     Write-Host "Created website/home.html" -ForegroundColor Green
     $created += "website/home.html (created)"
@@ -1958,4 +1868,3 @@ Write-Host "Then open http://127.0.0.1:8000/ and you should see:" -ForegroundCol
 Write-Host "    Website for the $projectName successfully running" -ForegroundColor Green
 Write-Host ""
 Write-Host "Happy coding! 🚀" -ForegroundColor Cyan
-

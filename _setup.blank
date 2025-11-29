@@ -1,4 +1,4 @@
-import os
+﻿import os
 import sys
 import re
 from collections import defaultdict
@@ -40,7 +40,7 @@ def c(text, colour):
 #  PAGE NAME HELPERS (support subfolders like 'reports/monthly')
 # -----------------------------
 def normalise_page_id(raw: str) -> str:
-    """Clean user input like ' //Reports//Monthly/ ' → 'reports/monthly'."""
+    """Clean user input like ' //Reports//Monthly/ ' â†’ 'reports/monthly'."""
     raw = raw.strip().strip("/").lower()
     raw = re.sub(r"/+", "/", raw)
     return raw
@@ -58,12 +58,12 @@ def valid_page_id(page_id: str) -> bool:
 
 
 def view_name_from_page(page_id: str) -> str:
-    """'reports/monthly' → 'reports_monthly' (for Python function name)."""
+    """'reports/monthly' â†’ 'reports_monthly' (for Python function name)."""
     return page_id.replace("/", "_")
 
 
 def url_path_from_page(page_id: str) -> str:
-    """'reports/monthly_report' → 'reports/monthly-report' (for URL path)."""
+    """'reports/monthly_report' â†’ 'reports/monthly-report' (for URL path)."""
     return "/".join(part.replace("_", "-") for part in page_id.split("/"))
 
 
@@ -80,7 +80,7 @@ def ensure_views_file():
     if not os.path.exists(VIEW_FILE):
         with open(VIEW_FILE, "w") as f:
             f.write("from django.shortcuts import render\n")
-        print(c("✔ Created views.py", GREEN))
+        print(c("âœ” Created views.py", GREEN))
 
     with open(VIEW_FILE, "r") as f:
         content = f.read()
@@ -88,7 +88,7 @@ def ensure_views_file():
     if "from django.shortcuts import render" not in content:
         with open(VIEW_FILE, "w") as f:
             f.write("from django.shortcuts import render\n\n" + content)
-        print(c("✔ Added 'render' import to views.py", GREEN))
+        print(c("âœ” Added 'render' import to views.py", GREEN))
 
 
 def strip_bom(filepath):
@@ -116,7 +116,7 @@ def ensure_urls_file():
                 "urlpatterns = [\n"
                 "]\n"
             )
-        print("✔ Created urls.py")
+        print("âœ” Created urls.py")
         return
 
     # Clean BOM if some editor or copy-paste added it
@@ -137,7 +137,7 @@ def ensure_urls_file():
         with open(URLS_FILE, "w", encoding="utf-8") as f:
             f.writelines(lines)
 
-        print("✔ Added 'from . import views' to urls.py")
+        print("âœ” Added 'from . import views' to urls.py")
 
 
 def ensure_nav_template():
@@ -170,7 +170,7 @@ def ensure_nav_template():
             "</nav>\n"
         )
 
-    print(c(f"✔ Created nav template: {NAV_FILE}", GREEN))
+    print(c(f"âœ” Created nav template: {NAV_FILE}", GREEN))
 
 
 def ensure_footer_template():
@@ -189,7 +189,7 @@ def ensure_footer_template():
             "</footer>\n"
         )
 
-    print(c(f"✔ Created footer template: {FOOTER_FILE}", GREEN))
+    print(c(f"âœ” Created footer template: {FOOTER_FILE}", GREEN))
 
 
 def ensure_base_template():
@@ -231,7 +231,7 @@ def ensure_base_template():
                 "</html>\n"
             )
 
-        print(c(f"✔ Created base template: {BASE_TEMPLATE}", GREEN))
+        print(c(f"âœ” Created base template: {BASE_TEMPLATE}", GREEN))
         return
 
     # If base.html already exists, ensure it has both includes
@@ -260,7 +260,7 @@ def ensure_base_template():
             lines.insert(0, include_line)
 
         changed = True
-        print(c("✔ Updated base.html to include nav.html", GREEN))
+        print(c("âœ” Updated base.html to include nav.html", GREEN))
 
     if not footer_present:
         footer_line = f'    {{% include "{APP_NAME}/footer.html" %}}\n'
@@ -277,7 +277,7 @@ def ensure_base_template():
             lines.append(footer_line)
 
         changed = True
-        print(c("✔ Updated base.html to include footer.html", GREEN))
+        print(c("âœ” Updated base.html to include footer.html", GREEN))
 
     if changed:
         with open(BASE_TEMPLATE, "w") as f:
@@ -297,7 +297,7 @@ def create_view(page_name: str):
     func_def = f"def {view_name}(request):"
 
     if func_def in content:
-        print(c(f"⚠ View '{view_name}()' already exists. Skipping.", YELLOW))
+        print(c(f"âš  View '{view_name}()' already exists. Skipping.", YELLOW))
         return
 
     template_ref = f"'{APP_NAME}/{page_name}.html'"
@@ -309,7 +309,7 @@ def create_view(page_name: str):
             f"    return render(request, {template_ref})\n"
         )
 
-    print(c(f"✔ Added view function '{view_name}()' to views.py", GREEN))
+    print(c(f"âœ” Added view function '{view_name}()' to views.py", GREEN))
 
 
 def create_template(page_name: str):
@@ -319,7 +319,7 @@ def create_template(page_name: str):
     os.makedirs(os.path.dirname(path), exist_ok=True)
 
     if os.path.exists(path):
-        print(c(f"⚠ Template '{page_name}.html' already exists. Skipping.", YELLOW))
+        print(c(f"âš  Template '{page_name}.html' already exists. Skipping.", YELLOW))
         return
 
     last_part = page_name.split("/")[-1]
@@ -339,7 +339,7 @@ def create_template(page_name: str):
             "{% endblock %}\n"
         )
 
-    print(c(f"✔ Created template: {path}", GREEN))
+    print(c(f"âœ” Created template: {path}", GREEN))
 
 
 def create_url(page_name: str):
@@ -355,7 +355,7 @@ def create_url(page_name: str):
     new_route = f"    path('{url_path}/', views.{view_name}, name='{view_name}'),\n"
 
     if any(new_route.strip() == line.strip() for line in lines):
-        print(c(f"⚠ URL for '{page_name}' already exists. Skipping.", YELLOW))
+        print(c(f"âš  URL for '{page_name}' already exists. Skipping.", YELLOW))
         return
 
     for i, line in enumerate(lines):
@@ -366,7 +366,7 @@ def create_url(page_name: str):
     with open(URLS_FILE, "w") as f:
         f.writelines(lines)
 
-    print(c(f"✔ Added URL route for '{page_name}' → /{url_path}/", GREEN))
+    print(c(f"âœ” Added URL route for '{page_name}' â†’ /{url_path}/", GREEN))
 
 
 # -----------------------------
@@ -375,7 +375,7 @@ def create_url(page_name: str):
 def delete_view(page_name: str):
     if not os.path.exists(VIEW_FILE):
         print(
-            c(f"⚠ views.py not found, skipping view removal for '{page_name}'.", YELLOW)
+            c(f"âš  views.py not found, skipping view removal for '{page_name}'.", YELLOW)
         )
         return
 
@@ -392,7 +392,7 @@ def delete_view(page_name: str):
             break
 
     if start_idx is None:
-        print(c(f"⚠ View function '{view_name}()' not found in views.py.", YELLOW))
+        print(c(f"âš  View function '{view_name}()' not found in views.py.", YELLOW))
         return
 
     end_idx = start_idx + 1
@@ -410,25 +410,25 @@ def delete_view(page_name: str):
     with open(VIEW_FILE, "w") as f:
         f.writelines(lines)
 
-    print(c(f"✔ Removed view function '{view_name}()' from views.py", GREEN))
+    print(c(f"âœ” Removed view function '{view_name}()' from views.py", GREEN))
 
 
 def delete_template(page_name: str):
     path = os.path.join(TEMPLATES_DIR, f"{page_name}.html")
 
     if not os.path.exists(path):
-        print(c(f"⚠ Template '{page_name}.html' not found, skipping.", YELLOW))
+        print(c(f"âš  Template '{page_name}.html' not found, skipping.", YELLOW))
         return
 
     os.remove(path)
-    print(c(f"✔ Deleted template: {path}", GREEN))
+    print(c(f"âœ” Deleted template: {path}", GREEN))
 
 
 def delete_url(page_name: str):
     strip_bom(URLS_FILE)
     if not os.path.exists(URLS_FILE):
         print(
-            c(f"⚠ urls.py not found, skipping URL removal for '{page_name}'.", YELLOW)
+            c(f"âš  urls.py not found, skipping URL removal for '{page_name}'.", YELLOW)
         )
         return
 
@@ -451,11 +451,11 @@ def delete_url(page_name: str):
         new_lines.append(line)
 
     if not removed:
-        print(c(f"⚠ No URL route found for '{page_name}' in urls.py.", YELLOW))
+        print(c(f"âš  No URL route found for '{page_name}' in urls.py.", YELLOW))
     else:
         with open(URLS_FILE, "w") as f:
             f.writelines(new_lines)
-        print(c(f"✔ Removed URL route for '{page_name}' from urls.py", GREEN))
+        print(c(f"âœ” Removed URL route for '{page_name}' from urls.py", GREEN))
 
 
 # -----------------------------
@@ -493,7 +493,7 @@ def list_pages():
     pages = get_pages()
 
     if not pages:
-        print(c("⚠ No page templates found (only maybe base.html).", YELLOW))
+        print(c("âš  No page templates found (only maybe base.html).", YELLOW))
         input(c("\nPress any key to return to menu...", CYAN))
         return
 
@@ -512,14 +512,14 @@ def update_navigation():
     Update the navigation links in nav.html based on existing pages.
 
     Grouping (folder-based):
-      - 'reports' root page → top-level or first item in dropdown
-      - 'reports/monthly', 'reports/summary' → dropdown items under Reports
-      - simple pages ('about') → top-level links
+      - 'reports' root page â†’ top-level or first item in dropdown
+      - 'reports/monthly', 'reports/summary' â†’ dropdown items under Reports
+      - simple pages ('about') â†’ top-level links
     """
     pages = get_pages()
 
     if not os.path.exists(NAV_FILE):
-        print(c("⚠ nav.html not found, navigation not updated.", YELLOW))
+        print(c("âš  nav.html not found, navigation not updated.", YELLOW))
         return
 
     def title_from(s):
@@ -619,7 +619,7 @@ def update_navigation():
     with open(NAV_FILE, "w") as f:
         f.write(new_content)
 
-    print(c("✔ Navigation in nav.html updated.", GREEN))
+    print(c("âœ” Navigation in nav.html updated.", GREEN))
 
 
 # -----------------------------
@@ -641,7 +641,7 @@ def run_createpages():
         if not valid_page_id(page_id):
             print(
                 c(
-                    f"❌ Invalid page name '{name}'. Use letters, numbers, underscores and '/'.",
+                    f"âŒ Invalid page name '{name}'. Use letters, numbers, underscores and '/'.",
                     RED,
                 )
             )
@@ -664,14 +664,14 @@ def run_createpages():
         print()
 
     update_navigation()
-    print(c("🎉 All selected pages created successfully!\n", GREEN))
+    print(c("ðŸŽ‰ All selected pages created successfully!\n", GREEN))
 
 
 def run_deletepages():
     """Show numbered list of pages, allow name/number/range input, then delete."""
     pages = get_pages()
     if not pages:
-        print(c("⚠ No pages available to delete.", YELLOW))
+        print(c("âš  No pages available to delete.", YELLOW))
         return
 
     print(f"\n{c('Pages in', CYAN)} {c(APP_NAME, BOLD)}:\n")
@@ -706,7 +706,7 @@ def run_deletepages():
                         seen.add(name)
                         selected.append(name)
                 else:
-                    print(c(f"⚠ Number '{n}' is out of range, skipping.", YELLOW))
+                    print(c(f"âš  Number '{n}' is out of range, skipping.", YELLOW))
         elif item.isdigit():
             idx = int(item) - 1
             if 0 <= idx < len(pages):
@@ -715,14 +715,14 @@ def run_deletepages():
                     seen.add(name)
                     selected.append(name)
             else:
-                print(c(f"⚠ Number '{item}' is out of range, skipping.", YELLOW))
+                print(c(f"âš  Number '{item}' is out of range, skipping.", YELLOW))
         else:
             name = item.lower()
             if name in pages and name not in seen:
                 seen.add(name)
                 selected.append(name)
             elif name not in pages:
-                print(c(f"⚠ Page '{name}' not found, skipping.", YELLOW))
+                print(c(f"âš  Page '{name}' not found, skipping.", YELLOW))
 
     if not selected:
         print(c("No valid pages selected. Cancelled.\n", YELLOW))
@@ -731,7 +731,7 @@ def run_deletepages():
     selected = [p for p in selected if p not in PROTECTED_PAGES]
 
     if not selected:
-        print(c("🚫 Selected pages are protected and cannot be deleted.", RED))
+        print(c("ðŸš« Selected pages are protected and cannot be deleted.", RED))
         return
 
     print("\nYou are about to delete these pages:")
@@ -750,7 +750,7 @@ def run_deletepages():
         delete_url(page_name)
 
     update_navigation()
-    print(c("\n🗑️  Done deleting requested pages.\n", GREEN))
+    print(c("\nðŸ—‘ï¸  Done deleting requested pages.\n", GREEN))
 
 
 # -----------------------------
@@ -758,7 +758,7 @@ def run_deletepages():
 # -----------------------------
 def rename_in_views(old: str, new: str):
     if not os.path.exists(VIEW_FILE):
-        print(c("⚠ views.py not found, skipping views rename.", YELLOW))
+        print(c("âš  views.py not found, skipping views rename.", YELLOW))
         return
 
     with open(VIEW_FILE, "r") as f:
@@ -768,7 +768,7 @@ def rename_in_views(old: str, new: str):
     new_def = f"def {view_name_from_page(new)}(request):"
 
     if old_def not in content:
-        print(c(f"⚠ View '{old}()' not found in views.py.", YELLOW))
+        print(c(f"âš  View '{old}()' not found in views.py.", YELLOW))
         return
 
     content = content.replace(old_def, new_def)
@@ -780,7 +780,7 @@ def rename_in_views(old: str, new: str):
     with open(VIEW_FILE, "w") as f:
         f.write(content)
 
-    print(c(f"✔ Renamed view '{old}' → '{new}' in views.py", GREEN))
+    print(c(f"âœ” Renamed view '{old}' â†’ '{new}' in views.py", GREEN))
 
 
 def rename_in_template(old: str, new: str):
@@ -788,22 +788,22 @@ def rename_in_template(old: str, new: str):
     new_path = os.path.join(TEMPLATES_DIR, f"{new}.html")
 
     if not os.path.exists(old_path):
-        print(c(f"⚠ Template '{old}.html' not found, skipping.", YELLOW))
+        print(c(f"âš  Template '{old}.html' not found, skipping.", YELLOW))
         return
 
     if os.path.exists(new_path):
-        print(c(f"⚠ Template '{new}.html' already exists, not overwriting.", YELLOW))
+        print(c(f"âš  Template '{new}.html' already exists, not overwriting.", YELLOW))
         return
 
     os.makedirs(os.path.dirname(new_path), exist_ok=True)
     os.rename(old_path, new_path)
-    print(c(f"✔ Renamed template '{old}.html' → '{new}.html'", GREEN))
+    print(c(f"âœ” Renamed template '{old}.html' â†’ '{new}.html'", GREEN))
 
 
 def rename_in_urls(old: str, new: str):
     strip_bom(URLS_FILE)
     if not os.path.exists(URLS_FILE):
-        print(c("⚠ urls.py not found, skipping urls rename.", YELLOW))
+        print(c("âš  urls.py not found, skipping urls rename.", YELLOW))
         return
 
     with open(URLS_FILE, "r") as f:
@@ -833,18 +833,18 @@ def rename_in_urls(old: str, new: str):
         new_lines.append(line)
 
     if not changed_any:
-        print(c(f"⚠ No URL entry found for '{old}' in urls.py.", YELLOW))
+        print(c(f"âš  No URL entry found for '{old}' in urls.py.", YELLOW))
     else:
         with open(URLS_FILE, "w") as f:
             f.writelines(new_lines)
-        print(c(f"✔ Updated URL route from '{old}' → '{new}' in urls.py", GREEN))
+        print(c(f"âœ” Updated URL route from '{old}' â†’ '{new}' in urls.py", GREEN))
 
 
 def run_rename_page():
     pages = get_pages()
 
     if not pages:
-        print(c("⚠ No pages available to rename.", YELLOW))
+        print(c("âš  No pages available to rename.", YELLOW))
         return
 
     print(f"\n{c('Pages in', CYAN)} {c(APP_NAME, BOLD)}:\n")
@@ -862,17 +862,17 @@ def run_rename_page():
         if 0 <= idx < len(pages):
             old = pages[idx]
         else:
-            print(c("⚠ Number out of range.\n", YELLOW))
+            print(c("âš  Number out of range.\n", YELLOW))
             return
     else:
         old = old_input
 
     if old in PROTECTED_PAGES:
-        print(c(f"🚫 '{old}' is a protected page and cannot be renamed.\n", RED))
+        print(c(f"ðŸš« '{old}' is a protected page and cannot be renamed.\n", RED))
         return
 
     if old not in pages:
-        print(c(f"⚠ Page '{old}' not found.\n", YELLOW))
+        print(c(f"âš  Page '{old}' not found.\n", YELLOW))
         return
 
     new = input("Enter NEW page name: ").strip().lower()
@@ -884,7 +884,7 @@ def run_rename_page():
     if not valid_page_name(new):
         print(
             c(
-                "❌ Invalid new page name. Use letters, numbers, underscores; start with a letter.\n",
+                "âŒ Invalid new page name. Use letters, numbers, underscores; start with a letter.\n",
                 RED,
             )
         )
@@ -895,13 +895,13 @@ def run_rename_page():
         return
 
     print(
-        f"\nRenaming page {c(old, CYAN)} → {c(new, CYAN)} in app {c(APP_NAME, BOLD)}...\n"
+        f"\nRenaming page {c(old, CYAN)} â†’ {c(new, CYAN)} in app {c(APP_NAME, BOLD)}...\n"
     )
     rename_in_views(old, new)
     rename_in_template(old, new)
     rename_in_urls(old, new)
     update_navigation()
-    print(c("\n✅ Rename process complete.\n", GREEN))
+    print(c("\nâœ… Rename process complete.\n", GREEN))
 
 
 # -----------------------------
@@ -917,7 +917,7 @@ def main():
         print(c("5.", CYAN), "Update navigation only")
         print(c("6.", CYAN), "Exit")
 
-        choice = input("Choose an option (1–6): ").strip()
+        choice = input("Choose an option (1â€“6): ").strip()
 
         if choice == "1":
             run_createpages()
@@ -930,7 +930,7 @@ def main():
         elif choice == "5":
             update_navigation()
         elif choice == "6":
-            print("Goodbye 👋")
+            print("Goodbye ðŸ‘‹")
             break
         else:
             print(c("Invalid choice, try again.\n", YELLOW))
