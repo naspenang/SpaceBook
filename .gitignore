@@ -8,6 +8,7 @@ __pycache__/
 *.log
 
 # Virtual environments
+/.venv
 venv/
 .venv/
 .env
@@ -74,5 +75,3 @@ npm-debug.log*
 *.swp
 *.swo
 __pycache__
-/.venv
-/.vscode
