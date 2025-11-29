@@ -50,6 +50,7 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
                 "social_django.context_processors.backends",
                 "social_django.context_processors.login_redirect",
+                "website.context_processors.google_profile_picture",
             ],
         },
     },
@@ -107,6 +108,24 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = (
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = "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"
 SOCIAL_AUTH_GOOGLE_OAUTH2_WHITELISTED_DOMAINS = ["uitm.edu.my", "student.uitm.edu.my"]
 
+SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
+    "https://www.googleapis.com/auth/userinfo.email",
+    "https://www.googleapis.com/auth/userinfo.profile",
+    "openid",
+]
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_EXTRA_DATA = [
+    "sub",
+    "email",
+    "name",
+    "given_name",
+    "family_name",
+    "picture",
+    "locale",
+    "hd",
+]
+
 LOGIN_URL = "/oauth/login/google-oauth2/"
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
+LOGOUT_URL = "/accounts/logout/"

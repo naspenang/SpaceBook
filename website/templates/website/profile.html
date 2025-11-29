@@ -3,10 +3,31 @@
 {% block title %}Profile | SpaceBook{% endblock %}
 
 {% block content %}
-<div class="container py-5" style="max-width: 600px;">
+<div class="container py-5" style="max-width: 700px;">
   <h2 class="mb-4">Profile</h2>
-  <p><strong>Name:</strong> {{ user.get_full_name|default:user.username }}</p>
-  <p><strong>Email:</strong> {{ user.email }}</p>
-  <p class="text-muted small">Google account linked through OAuth2.</p>
+
+  <!-- Big profile picture -->
+  {% if google_picture %}
+    <div class="text-center mb-4">
+      <img src="{{ google_picture }}"
+           class="rounded-circle mb-2"
+           style="width: 120px; height: 120px; object-fit: cover; border: 3px solid #ddd;">
+      <div class="fw-semibold mt-1">
+        {{ user.get_full_name|default:user.username }}
+      </div>
+      <div class="text-muted small">
+        {{ user.email }}
+      </div>
+    </div>
+  {% else %}
+    <p><strong>Name:</strong> {{ user.get_full_name|default:user.username }}</p>
+    <p><strong>Email:</strong> {{ user.email }}</p>
+  {% endif %}
+
+  <br /><br /><br /><br />
+  <p class="text-muted small mb-4" style="text-align: center;color: #367bfaff !important;">
+    This data is managed by your organization (UiTM) via Google OAuth2.
+  </p>
+
 </div>
 {% endblock %}
