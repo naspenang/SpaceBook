@@ -1,0 +1,12 @@
+{% extends "website/base.html" %}
+
+{% block title %}Profile | SpaceBook{% endblock %}
+
+{% block content %}
+<div class="container py-5" style="max-width: 600px;">
+  <h2 class="mb-4">Profile</h2>
+  <p><strong>Name:</strong> {{ user.get_full_name|default:user.username }}</p>
+  <p><strong>Email:</strong> {{ user.email }}</p>
+  <p class="text-muted small">Google account linked through OAuth2.</p>
+</div>
+{% endblock %}
