@@ -99,7 +99,11 @@ USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
-STATIC_URL = "/static/"
+import os
+
+BASE_PATH_PREFIX = os.getenv("BASE_PATH_PREFIX", "")
+
+STATIC_URL = f"{BASE_PATH_PREFIX}/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
