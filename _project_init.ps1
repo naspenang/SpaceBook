@@ -81,6 +81,7 @@ social-auth-core==4.8.1
 sqlparse==0.5.3
 tzdata==2025.2
 urllib3==2.5.0
+whitenoise==6.11.0
 "@
 
     $requirementsText | Set-Content $requirementsPath -Encoding utf8
