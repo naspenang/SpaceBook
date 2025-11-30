@@ -106,6 +106,7 @@ SPACEBOOK_PATH_PREFIX = os.getenv("SPACEBOOK_PATH_PREFIX", "")
 STATIC_URL = f"{SPACEBOOK_PATH_PREFIX}/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+FORCE_SCRIPT_NAME = SPACEBOOK_PATH_PREFIX or None
 
 
 # Default primary key field type
@@ -143,7 +144,7 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_EXTRA_DATA = [
     "hd",
 ]
 
-LOGIN_URL = "/oauth/login/google-oauth2/"
-LOGIN_REDIRECT_URL = "/"
-LOGOUT_REDIRECT_URL = "/"
-LOGOUT_URL = "/accounts/logout/"
+LOGIN_URL = f"{SPACEBOOK_PATH_PREFIX}/oauth/login/google-oauth2/"
+LOGIN_REDIRECT_URL = f"{SPACEBOOK_PATH_PREFIX}/"
+LOGOUT_REDIRECT_URL = f"{SPACEBOOK_PATH_PREFIX}/"
+LOGOUT_URL = f"{SPACEBOOK_PATH_PREFIX}/logout/"

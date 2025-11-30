@@ -75,3 +75,5 @@ npm-debug.log*
 *.swp
 *.swo
 __pycache__
+/*.db
+/*.sqlite3
