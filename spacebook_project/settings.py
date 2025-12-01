@@ -1,5 +1,8 @@
 ﻿from pathlib import Path
 
+USE_X_FORWARDED_HOST = True
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -122,6 +125,13 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = (
 )
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = "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"
 SOCIAL_AUTH_GOOGLE_OAUTH2_WHITELISTED_DOMAINS = ["uitm.edu.my", "student.uitm.edu.my"]
+
+# NEW: explicitly set redirect URI used by Google
+SOCIAL_AUTH_GOOGLE_OAUTH2_REDIRECT_URI = (
+    "http://localhost/spacebook/oauth/complete/google-oauth2/"
+)
+# later in production you can also add "https://online.library.uitm.edu.my/spacebook/oauth/complete/google-oauth2/"
+
 SOCIAL_AUTH_LOGIN_ERROR_URL = f"{SPACEBOOK_PATH_PREFIX}/"
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = f"{SPACEBOOK_PATH_PREFIX}/"
 SOCIAL_AUTH_USE_NEXT = True
