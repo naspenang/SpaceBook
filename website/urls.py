@@ -8,5 +8,6 @@ urlpatterns = [
     path("", home, name="home"),
     path("profile/", profile, name="profile"),
     path("about/", views.about, name="about"),
+    path("blank/", views.blank, name="blank"),
     path("branches/add/", branch_create, name="branch_add"),
 ]

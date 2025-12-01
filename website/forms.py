@@ -6,7 +6,7 @@ from .models import Branch
 class BranchForm(forms.ModelForm):
     class Meta:
         model = Branch
-        fields = ["name", "state", "code"]
+        fields = ["name", "state", "code", "image"]
         widgets = {
             "name": forms.TextInput(
                 attrs={
@@ -31,4 +31,5 @@ class BranchForm(forms.ModelForm):
             "name": "Branch Name",
             "state": "State",
             "code": "Branch Code",
+            "image": "Branch Image",
         }

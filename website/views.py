@@ -31,12 +31,24 @@ def branch_create(request):
     Only logged-in users can access this.
     """
     if request.method == "POST":
-        form = BranchForm(request.POST)
+        form = BranchForm(request.POST, request.FILES)  # ← add request.FILES
         if form.is_valid():
-            form.save()  # router sends this to main.db
+            form.save()
             messages.success(request, "Branch added successfully.")
-            return redirect("home")  # for now, go back to home
+            return redirect("home")
     else:
         form = BranchForm()
 
     return render(request, "website/branch_form.html", {"form": form})
+
+
+def blank(request):
+    greeting = ""  # default value
+
+    if request.method == "POST":
+        fullname = request.POST.get("fullname", "")
+        greeting = f"Hello, {fullname}!"
+
+    context = {"greeting": greeting}
+
+    return render(request, "website/_blank.html", context)

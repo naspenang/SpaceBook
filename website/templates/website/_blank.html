@@ -1,0 +1,22 @@
+﻿<html>  
+
+<body>
+<h1>Blank Page for Testing</h1>
+<p>This is a blank page used for testing purposes.</p>
+
+<p>Total is: {{ fullname }}</p>
+<p>User is: {{ username }}</p>
+<p>Favorite number is: {{ fav_num }}</p>
+<p>Doubled favorite number is: {{ doubled }}</p>
+
+<form method="post">
+  {% csrf_token %}
+  <label for="fullname">Enter your full name:</label>
+  <input type="text" id="fullname" name="fullname" required>
+  <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+</form>
+
+{{ greeting }}
+
+</body>
+</html>
