@@ -6,6 +6,7 @@ import platform
 import psutil
 import django
 
+from django.shortcuts import redirect
 from django.contrib import admin
 from django.urls import path, include
 from django.http import JsonResponse
@@ -88,11 +89,12 @@ def health(request):
 
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
+    path("", lambda request: redirect("/spacebook/")),  # 👈 root redirect
+    path("spacebook/admin/", admin.site.urls),
     path(
-        "", include("website.urls")
+        "spacebook/", include("website.urls")
     ),  # include all urls from the website app (home + profile)
-    path("accounts/", include("django.contrib.auth.urls")),  # auth + social
-    path("oauth/", include("social_django.urls", namespace="social")),
-    path("health/", health, name="health"),
+    path("spacebook/accounts/", include("django.contrib.auth.urls")),  # auth + social
+    path("spacebook/oauth/", include("social_django.urls", namespace="social")),
+    path("spacebook/health/", health, name="health"),
 ]

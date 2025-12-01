@@ -126,7 +126,7 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_WHITELISTED_DOMAINS = ["uitm.edu.my", "student.uitm.ed
 
 # NEW: explicitly set redirect URI used by Google
 SOCIAL_AUTH_GOOGLE_OAUTH2_REDIRECT_URI = (
-    "http://localhost/spacebook/oauth/complete/google-oauth2/"
+    "http://127.0.0.1:8000/spacebook/oauth/complete/google-oauth2/"
 )
 # SOCIAL_AUTH_GOOGLE_OAUTH2_REDIRECT_URI = "https://online.library.uitm.edu.my/spacebook/oauth/complete/google-oauth2/"
 
@@ -138,8 +138,8 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_AUTHORIZATION_URL = (
 )
 SOCIAL_AUTH_GOOGLE_OAUTH2_TOKEN_URL = "https://oauth2.googleapis.com/token"
 
-SOCIAL_AUTH_LOGIN_ERROR_URL = "/"
-SOCIAL_AUTH_LOGIN_REDIRECT_URL = "/"
+SOCIAL_AUTH_LOGIN_ERROR_URL = "/spacebook/"
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = "/spacebook/"
 SOCIAL_AUTH_USE_NEXT = True
 
 
@@ -160,7 +160,7 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_EXTRA_DATA = [
     "hd",
 ]
 
-LOGIN_URL = "/oauth/login/google-oauth2/"
-LOGIN_REDIRECT_URL = "/"
-LOGOUT_REDIRECT_URL = "/"
-LOGOUT_URL = "/logout/"
+LOGIN_URL = "/spacebook/oauth/login/google-oauth2/"
+LOGIN_REDIRECT_URL = "/spacebook/"
+LOGOUT_REDIRECT_URL = "/spacebook/"
+LOGOUT_URL = "/spacebook/accounts/logout/"
