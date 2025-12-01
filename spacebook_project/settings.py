@@ -130,7 +130,13 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_WHITELISTED_DOMAINS = ["uitm.edu.my", "student.uitm.ed
 SOCIAL_AUTH_GOOGLE_OAUTH2_REDIRECT_URI = (
     "http://localhost/spacebook/oauth/complete/google-oauth2/"
 )
+# SOCIAL_AUTH_GOOGLE_OAUTH2_REDIRECT_URI = "https://online.library.uitm.edu.my/spacebook/oauth/complete/google-oauth2/"
+
 # later in production you can also add "https://online.library.uitm.edu.my/spacebook/oauth/complete/google-oauth2/"
+
+# Tell social-auth the REAL Google endpoints
+SOCIAL_AUTH_GOOGLE_OAUTH2_AUTHORIZATION_URL = "https://accounts.google.com/o/oauth2/auth"
+SOCIAL_AUTH_GOOGLE_OAUTH2_TOKEN_URL = "https://oauth2.googleapis.com/token"
 
 SOCIAL_AUTH_LOGIN_ERROR_URL = f"{SPACEBOOK_PATH_PREFIX}/"
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = f"{SPACEBOOK_PATH_PREFIX}/"
