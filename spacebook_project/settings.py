@@ -1,4 +1,6 @@
-﻿from pathlib import Path
+﻿# Django settings for spacebook_project project.
+
+from pathlib import Path
 
 USE_X_FORWARDED_HOST = True
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
@@ -105,9 +107,12 @@ USE_TZ = True
 import os
 
 
-STATIC_URL = "/static/"
+STATIC_URL = "/spacebook/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
+MEDIA_URL = "/spacebook/media/"
+MEDIA_ROOT = BASE_DIR / "media"
 
 
 # Default primary key field type
