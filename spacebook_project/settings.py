@@ -1,5 +1,5 @@
 ﻿# Django settings for spacebook_project project.
-
+import os
 from pathlib import Path
 
 USE_X_FORWARDED_HOST = True
@@ -46,6 +46,8 @@ TEMPLATES = [
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
+                "django.template.context_processors.media",
+                "django.template.context_processors.static",
                 "django.template.context_processors.debug",
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
@@ -72,11 +74,8 @@ DATABASES = {
     },
 }
 
-
 DATABASE_ROUTERS = ["website.db_router.MainRouter"]
 
-
-# Password validation
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
@@ -94,14 +93,9 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization
 LANGUAGE_CODE = "en-us"
-TIME_ZONE = "UTC"
+TIME_ZONE = "Asia/Kuala_Lumpur"
 USE_I18N = True
 USE_TZ = True
-
-
-# Static files (CSS, JavaScript, Images)
-import os
-
 
 STATIC_URL = "/spacebook/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
@@ -122,18 +116,15 @@ AUTHENTICATION_BACKENDS = (
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = (
     "496461563970-jltkj3brmut9ubdcmu7c2fde885ashf0.apps.googleusercontent.com"
 )
+
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = "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"
 SOCIAL_AUTH_GOOGLE_OAUTH2_WHITELISTED_DOMAINS = ["uitm.edu.my", "student.uitm.edu.my"]
 
-# NEW: explicitly set redirect URI used by Google
+
 SOCIAL_AUTH_GOOGLE_OAUTH2_REDIRECT_URI = (
     "http://127.0.0.1:8000/spacebook/oauth/complete/google-oauth2/"
 )
-# SOCIAL_AUTH_GOOGLE_OAUTH2_REDIRECT_URI = "https://online.library.uitm.edu.my/spacebook/oauth/complete/google-oauth2/"
 
-# later in production you can also add "https://online.library.uitm.edu.my/spacebook/oauth/complete/google-oauth2/"
-
-# Tell social-auth the REAL Google endpoints
 SOCIAL_AUTH_GOOGLE_OAUTH2_AUTHORIZATION_URL = (
     "https://accounts.google.com/o/oauth2/auth"
 )

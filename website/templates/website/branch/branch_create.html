@@ -11,7 +11,7 @@
 
     {{ form.non_field_errors }}
 
-    <div class="mb-3">
+    <div class="mb-3 required">
       <label class="form-label" for="{{ form.name.id_for_label }}">
         {{ form.name.label }}
       </label>
@@ -19,7 +19,7 @@
       {{ form.name.errors }}
     </div>
 
-    <div class="mb-3">
+    <div class="mb-3 required">
       <label class="form-label" for="{{ form.state.id_for_label }}">
         {{ form.state.label }}
       </label>
@@ -27,7 +27,7 @@
       {{ form.state.errors }}
     </div>
 
-    <div class="mb-3">
+    <div class="mb-3 required">
       <label class="form-label" for="{{ form.code.id_for_label }}">
         {{ form.code.label }}
       </label>
@@ -35,29 +35,32 @@
       {{ form.code.errors }}
     </div>
 
-<div class="mb-3">
-  <label class="form-label" for="{{ form.image.id_for_label }}">
-    {{ form.image.label|default:"Branch Image" }}
-  </label>
-  {{ form.image }}
-  {{ form.image.errors }}
-
-  <div class="form-text mt-1">
-    Optional – upload a logo or photo for this branch.
-  </div>
-
-  <!-- ⭐ Recommended Image Sizes Note -->
-  <div class="alert alert-info mt-2 p-2" style="font-size: 0.9rem;">
-    <strong>Recommended image size:</strong><br>
-    • <strong>800 × 500 px</strong> for logos (PNG)<br>
-    • <strong>1200 × 800 px</strong> for photos (JPG)<br>
-    <span class="text-muted">Avoid very tall/portrait images — square or wide works best.</span>
-  </div>
-</div>
+    <div class="mb-3">
+      <label class="form-label">{{ form.image.label }}</label>
+      {{ form.image }}
+      {{ form.image.errors }}
+      <div class="form-text">
+        Optional. JPG only. Maximum size: 2MB.
+      </div>
+    </div>
 
 
     <button type="submit" class="btn btn-primary">Save Branch</button>
     <a href="{% url 'home' %}" class="btn btn-secondary ms-2">Cancel</a>
+
+    <script>
+    const form = document.querySelector("form");
+    if (form) {
+      form.addEventListener("submit", function () {
+        const buttons = form.querySelectorAll("button[type='submit']");
+        buttons.forEach(btn => {
+          btn.disabled = true;
+          btn.innerText = "Processing...";
+        });
+      });
+    }
+  </script>
+
   </form>
 </div>
 {% endblock %}

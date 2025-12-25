@@ -1,13 +1,15 @@
-# This is website/urls.py
-
 from django.urls import path
 from . import views
-from .views import home, profile, branch_create
+from . import views_branch
+
 
 urlpatterns = [
-    path("", home, name="home"),
-    path("profile/", profile, name="profile"),
+    path("", views.home, name="home"),
+    path("profile/", views.profile, name="profile"),
     path("about/", views.about, name="about"),
     path("blank/", views.blank, name="blank"),
-    path("branches/add/", branch_create, name="branch_add"),
+    # Branch routes
+    path("branch/create/", views_branch.branch_create, name="branch_add"),
+    path("branch/edit/<str:code>/", views_branch.branch_edit, name="branch_edit"),
+    path("branch/delete/<str:code>/", views_branch.branch_delete, name="branch_delete"),
 ]

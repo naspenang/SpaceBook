@@ -2,3 +2,8 @@
   background-color: #5F3B7A !important;
   color: white !important;
 }
+
+.branch-select-card:hover {
+  transform: translateY(-5px);
+  transition: all 0.3s ease;
+}

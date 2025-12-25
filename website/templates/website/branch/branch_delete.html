@@ -1,0 +1,57 @@
+{% extends "website/base.html" %}
+{% load static %}
+
+{% block title %}Delete Branch | SpaceBook{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="card shadow-sm border-0 mx-auto" style="max-width: 500px;">
+    <div class="card-body text-center">
+
+      <h4 class="text-danger mb-3">Delete Branch</h4>
+
+        <div class="mt-3">
+            <img src="{{ MEDIA_URL }}branches/{{ branch.code|lower }}.jpg"
+                class="img-thumbnail mt-2"
+                style="max-height: 160px;"
+                alt="{{ branch.name }}"
+                onerror="this.src='{% static 'images/branch-placeholder.jpg' %}'">
+        </div>
+
+      <p>
+        Are you sure you want to delete<br>
+        <strong>{{ branch.name }}</strong>?
+      </p>
+
+      <p class="text-muted small">
+        This action cannot be undone.
+      </p>
+
+      <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">
+          Yes, Delete
+        </button>
+        <a href="{% url 'home' %}" class="btn btn-secondary ms-2">
+          Cancel
+        </a>
+
+        <script>
+          const form = document.querySelector("form");
+          if (form) {
+            form.addEventListener("submit", function () {
+              const buttons = form.querySelectorAll("button[type='submit']");
+              buttons.forEach(btn => {
+                btn.disabled = true;
+                btn.innerText = "Processing...";
+              });
+            });
+          }
+        </script>
+
+      </form>
+
+    </div>
+  </div>
+</div>
+{% endblock %}

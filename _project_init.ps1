@@ -70,6 +70,7 @@ django-environ==0.12.0
 django-htmx==1.26.0
 idna==3.11
 oauthlib==3.3.1
+pillow==12.0.0
 psutil==7.1.3
 pycparser==2.23
 PyJWT==2.10.1
