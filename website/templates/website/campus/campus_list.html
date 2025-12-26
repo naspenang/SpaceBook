@@ -1,0 +1,22 @@
+<table class="table">
+  <tr>
+    <th>Campus</th>
+    <th>Branch</th>
+    <th>City</th>
+    <th>Role</th>
+    <th>Action</th>
+  </tr>
+
+  {% for c in campuses %}
+  <tr>
+    <td>{{ c.campus_name }}</td>
+    <td>{{ c.branch_name }}</td>
+    <td>{{ c.city }}</td>
+    <td>{{ c.role }}</td>
+    <td>
+      <a href="{% url 'campus_edit' c.id %}">Edit</a>
+      <a href="{% url 'campus_delete' c.id %}">Delete</a>
+    </td>
+  </tr>
+  {% endfor %}
+</table>

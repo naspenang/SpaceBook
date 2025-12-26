@@ -56,6 +56,7 @@ TEMPLATES = [
                 "social_django.context_processors.backends",
                 "social_django.context_processors.login_redirect",
                 "website.context_processors.google_profile_picture",
+                "website.context_processors.nav_branches",
             ],
         },
     },

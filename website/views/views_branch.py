@@ -13,14 +13,20 @@ from ..forms import BranchForm
 # -----------------------
 #  Pages Code
 # -----------------------
+from website.models import Campus
+
 def branch_detail(request, code):
     branch = get_object_or_404(Branch, code=code)
 
-    return render(
-        request,
-        "website/branch/branch_detail.html",
-        {"branch": branch},
-    )
+    campuses = Campus.objects.filter(
+        branch_name=branch.name
+    ).order_by("campus_name")
+
+    return render(request, "website/branch/branch_detail.html", {
+        "branch": branch,
+        "campuses": campuses
+    })
+
 
 
 def branch_list(request):
@@ -132,7 +138,7 @@ def branch_list_api(request):
             {
                 "code": b.code,
                 "name": b.name,
-                "state": b.state,
+                "location": b.location,
                 "image_url": f"{request.scheme}://{request.get_host()}{settings.MEDIA_URL}branches/{b.code.lower()}.jpg",
             }
         )

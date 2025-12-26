@@ -40,5 +40,49 @@
     </div>
   </div>
 
+<hr class="my-4">
+
+<h4 class="mb-3">
+  <i class="bi bi-mortarboard-fill me-2"></i>
+  Campuses under this Branch
+</h4>
+
+{% if campuses %}
+  <div class="row g-3">
+    {% for c in campuses %}
+      <div class="col-md-6 col-lg-4">
+        <div class="card shadow-sm border-0 h-100">
+          <div class="card-body">
+            <h5 class="card-title">{{ c.campus_name }}</h5>
+
+            <p class="mb-1 text-muted">
+              <i class="bi bi-geo-alt"></i>
+              {{ c.city }}, {{ c.state }}
+            </p>
+
+            <span class="badge bg-secondary">
+              {{ c.role }}
+            </span>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <p class="text-muted">
+    No campuses have been added for this branch yet.
+  </p>
+
+  {% if user.is_authenticated %}
+  <a href="{% url 'campus_create' %}"
+     class="btn btn-sm btn-primary mb-3">
+    <i class="bi bi-plus-circle"></i>
+    Add Campus
+  </a>
+{% endif %}
+
+{% endif %}
+
+
 </div>
 {% endblock %}

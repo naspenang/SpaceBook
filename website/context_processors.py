@@ -1,4 +1,5 @@
 # website/context_processors.py
+from .models import Branch
 from social_django.models import UserSocialAuth
 
 
@@ -17,3 +18,9 @@ def google_profile_picture(request):
             picture = None
 
     return {"google_picture": picture}
+
+
+def nav_branches(request):
+    # Order by name so it looks nice in the dropdown
+    branches = Branch.objects.all().order_by("name")
+    return {"nav_branches": branches}
