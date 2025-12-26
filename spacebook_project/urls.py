@@ -95,6 +95,7 @@ urlpatterns = [
     path("spacebook/admin/", admin.site.urls),
     path("spacebook/", include("website.urls")),
     path("spacebook/accounts/", include("django.contrib.auth.urls")), 
+    #path("spacebook/accounts/", include("accounts.urls")),
     path("spacebook/oauth/", include("social_django.urls", namespace="social")),
     path("spacebook/health/", health, name="health"),
 ]

@@ -1,0 +1,11 @@
+{% extends "website/embed_base.html" %}
+
+{% block title %}Branches (Embed){% endblock %}
+
+{% block content %}
+  {% if view_mode == "list" %}
+    {% include "website/branch/_branch_list_table.html" %}
+  {% else %}
+    {% include "website/branch/_branch_grid.html" %}
+  {% endif %}
+{% endblock %}

@@ -1,0 +1,46 @@
+<table class="table table-hover align-middle">
+  <thead class="table-light">
+    <tr>
+      <th>Image</th>
+      <th>Name</th>
+      <th>State</th>
+      <th>Code</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    {% for b in branches %}
+    <tr>
+      <td style="width: 120px;">
+        <img src="{{ MEDIA_URL }}branches/{{ b.code|lower }}.jpg"
+             class="img-thumbnail"
+             style="max-height: 80px;"
+             onerror="this.src='/static/images/branch-placeholder.jpg'">
+      </td>
+
+      <td>{{ b.name }}</td>
+      <td>{{ b.location|default:"-" }}</td>
+      <td><strong>{{ b.code }}</strong></td>
+
+      <td>
+        <a href="{% url 'branch_detail' b.code %}"
+           class="btn btn-sm btn-primary">View</a>
+
+        {% if user.is_authenticated %}
+          <a href="{% url 'branch_edit' b.code %}"
+             class="btn btn-sm btn-warning ms-1">Edit</a>
+          <a href="{% url 'branch_delete' b.code %}"
+             class="btn btn-sm btn-danger ms-1">Delete</a>
+        {% endif %}
+      </td>
+    </tr>
+    {% empty %}
+      <tr>
+        <td colspan="5" class="text-center text-muted">
+          No branches found.
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>

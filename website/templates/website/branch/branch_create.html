@@ -3,8 +3,16 @@
 {% block title %}Add Branch | SpaceBook{% endblock %}
 
 {% block content %}
+
+
 <div class="container py-5">
-  <h2 class="mb-4">Add New UiTM Branch</h2>
+  <div class="d-flex align-items-center mb-4">
+    <h2 class="mb-0">
+      <i class="bi bi-building-add me-2 text-primary"></i>
+      Add New UiTM Branch
+    </h2>
+    <hr class="flex-grow-1 ms-3">
+  </div>
 
   <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
@@ -12,41 +20,56 @@
     {{ form.non_field_errors }}
 
     <div class="mb-3 required">
-      <label class="form-label" for="{{ form.name.id_for_label }}">
-        {{ form.name.label }}
-      </label>
-      {{ form.name }}
+      <div class="input-group">
+        <span class="input-group-text">
+          <i class="bi bi-building"></i>
+        </span>
+        {{ form.name }}
+      </div>
       {{ form.name.errors }}
     </div>
 
+
     <div class="mb-3 required">
-      <label class="form-label" for="{{ form.state.id_for_label }}">
-        {{ form.state.label }}
-      </label>
-      {{ form.state }}
+      <div class="input-group">
+        <span class="input-group-text">
+          <i class="bi bi-geo-alt"></i>
+        </span>
+        {{ form.state }}
+      </div>
       {{ form.state.errors }}
     </div>
 
-    <div class="mb-3 required">
-      <label class="form-label" for="{{ form.code.id_for_label }}">
-        {{ form.code.label }}
-      </label>
-      {{ form.code }}
-      {{ form.code.errors }}
-    </div>
 
-    <div class="mb-3">
-      <label class="form-label">{{ form.image.label }}</label>
+
+
+
+
+  <div class="mb-3">
+    <div class="input-group">
+      <span class="input-group-text">
+        <i class="bi bi-image"></i>
+      </span>
       {{ form.image }}
-      {{ form.image.errors }}
-      <div class="form-text">
-        Optional. JPG only. Maximum size: 2MB.
-      </div>
     </div>
+    {{ form.image.errors }}
+    <div class="form-text">
+      Optional. JPG only. Maximum size: 2MB.
+    </div>
+  </div>
 
 
-    <button type="submit" class="btn btn-primary">Save Branch</button>
-    <a href="{% url 'home' %}" class="btn btn-secondary ms-2">Cancel</a>
+
+    <button type="submit" class="btn btn-primary">
+      <i class="bi bi-check-circle me-1"></i>
+      Save Branch
+    </button>
+
+    <a href="{% url 'home' %}" class="btn btn-secondary ms-2">
+      <i class="bi bi-x-circle me-1"></i>
+      Cancel
+    </a>
+
 
     <script>
     const form = document.querySelector("form");

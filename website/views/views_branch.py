@@ -1,13 +1,55 @@
 import os
+from django.http import JsonResponse
 from PIL import Image
-
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 
-from .models import Branch
-from .forms import BranchForm
+from ..models import Branch
+from ..forms import BranchForm
+
+
+# -----------------------
+#  Pages Code
+# -----------------------
+def branch_detail(request, code):
+    branch = get_object_or_404(Branch, code=code)
+
+    return render(
+        request,
+        "website/branch/branch_detail.html",
+        {"branch": branch},
+    )
+
+
+def branch_list(request):
+    branches = Branch.objects.all().order_by("name")
+
+    view_mode = request.GET.get("view", "grid")  # default = grid
+
+    return render(
+        request,
+        "website/branch/branch_list.html",
+        {
+            "branches": branches,
+            "view_mode": view_mode,
+        },
+    )
+
+
+def branch_list_embed(request):
+    branches = Branch.objects.all().order_by("name")
+    view_mode = request.GET.get("view", "grid")  # default = grid
+
+    return render(
+        request,
+        "website/branch/branch_list_embed.html",
+        {
+            "branches": branches,
+            "view_mode": view_mode,
+        },
+    )
 
 
 @login_required
@@ -77,6 +119,28 @@ def branch_delete(request, code):
 
 
 # -----------------------
+#  API
+# -----------------------
+
+
+def branch_list_api(request):
+    branches = Branch.objects.all().order_by("name")
+
+    data = []
+    for b in branches:
+        data.append(
+            {
+                "code": b.code,
+                "name": b.name,
+                "state": b.state,
+                "image_url": f"{request.scheme}://{request.get_host()}{settings.MEDIA_URL}branches/{b.code.lower()}.jpg",
+            }
+        )
+
+    return JsonResponse({"branches": data})
+
+
+# -----------------------
 # Helper functions
 # -----------------------
 
@@ -93,7 +157,29 @@ def save_branch_image(branch_code, uploaded_file):
     if image.mode in ("RGBA", "P"):
         image = image.convert("RGB")
 
-    image.thumbnail((600, 400))
+    target_width = 600
+    target_height = 400
+
+    img_ratio = image.width / image.height
+    target_ratio = target_width / target_height
+
+    if img_ratio > target_ratio:
+        # image too wide → crop sides
+        new_height = image.height
+        new_width = int(new_height * target_ratio)
+    else:
+        # image too tall → crop top/bottom
+        new_width = image.width
+        new_height = int(new_width / target_ratio)
+
+    left = (image.width - new_width) // 2
+    top = (image.height - new_height) // 2
+    right = left + new_width
+    bottom = top + new_height
+
+    image = image.crop((left, top, right, bottom))
+    image = image.resize((target_width, target_height))
+
     image.save(path, "JPEG", quality=85, optimize=True)
 
 
