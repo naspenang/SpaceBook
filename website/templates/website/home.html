@@ -14,8 +14,24 @@
 <div class="container py-5">
   <h2 class="text-center mb-4">Choose Your UiTM Branch</h2>
 
+  <!-- Search box -->
+  <form method="get" class="mb-4 d-flex justify-content-center">
+    <div class="input-group" style="max-width: 420px;">
+      <input type="text"
+             name="q"
+             value="{{ query }}"
+             class="form-control"
+             placeholder="Search branch name...">
 
-{% include "website/branch/_branch_grid.html" %}
+      <button class="btn btn-outline-primary" type="submit">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </form>
+
+  {% include "website/branch/_branch_grid.html" %}
+</div>
+
 
 
 {% endblock %}

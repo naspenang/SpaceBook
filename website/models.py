@@ -1,7 +1,9 @@
 # website/models.py
 from django.db import models
 
-
+#------------------------------
+# Branch Model
+#------------------------------
 class Branch(models.Model):
     code = models.CharField(max_length=20, primary_key=True)
     name = models.CharField(max_length=255)
@@ -11,26 +13,56 @@ class Branch(models.Model):
         return f"{self.name} ({self.code})"
 
 
+#------------------------------
+# Campus Model
+#------------------------------
 class Campus(models.Model):
     ROLE_CHOICES = [
         ("HQ", "HQ"),
         ("Main Campus", "Main Campus"),
         ("Satellite Campus", "Satellite Campus"),
     ]
-    branch_name = models.CharField(
-        max_length=100, help_text="Main UiTM branch, e.g. UiTM Cawangan Pulau Pinang"
+
+    campus_code = models.CharField(
+        max_length=20,
+        primary_key=True,
+        help_text="Unique campus identifier"
     )
-    campus_name = models.CharField(max_length=150, help_text="Official campus name")
+
+    branch = models.ForeignKey(
+        Branch,
+        to_field="code",
+        db_column="branch_code",
+        on_delete=models.PROTECT,
+        related_name="campuses",
+    )
+
+
+    campus_name = models.CharField(
+        max_length=150,
+        help_text="Official campus name"
+    )
+
     city = models.CharField(
-        max_length=100, help_text="City or district where the campus is located"
+        max_length=100,
+        blank=True
     )
-    state = models.CharField(max_length=100, help_text="State in Malaysia")
-    role = models.CharField(max_length=20, choices=ROLE_CHOICES)
+
+    state = models.CharField(
+        max_length=100,
+        blank=True
+    )
+
+    role = models.CharField(
+        max_length=20,
+        choices=ROLE_CHOICES
+    )
 
     class Meta:
-        ordering = ["branch_name", "campus_name"]
+        db_table = "website_campus"
+        ordering = ["campus_name"]
         verbose_name = "Campus"
         verbose_name_plural = "Campuses"
 
     def __str__(self):
-        return f"{self.campus_name} ({self.branch_name})"
+        return f"{self.campus_name} ({self.campus_code})"

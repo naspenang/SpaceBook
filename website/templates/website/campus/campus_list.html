@@ -10,12 +10,16 @@
   {% for c in campuses %}
   <tr>
     <td>{{ c.campus_name }}</td>
-    <td>{{ c.branch_name }}</td>
+
+    <!-- FK access -->
+    <td>{{ c.branch.name }}</td>
+
     <td>{{ c.city }}</td>
     <td>{{ c.role }}</td>
+
     <td>
-      <a href="{% url 'campus_edit' c.id %}">Edit</a>
-      <a href="{% url 'campus_delete' c.id %}">Delete</a>
+      <a href="{% url 'campus_edit' c.campus_code %}">Edit</a>
+      <a href="{% url 'campus_delete' c.campus_code %}">Delete</a>
     </td>
   </tr>
   {% endfor %}

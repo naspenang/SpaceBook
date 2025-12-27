@@ -5,8 +5,21 @@ from ..models import Branch
 
 
 def home(request):
-    branches = Branch.objects.all().order_by("name")
-    return render(request, "website/home.html", {"branches": branches})
+    query = request.GET.get("q", "")
+
+    branches = Branch.objects.filter(
+        name__icontains=query
+    ).order_by("name")
+
+    return render(
+        request,
+        "website/home.html",
+        {
+            "branches": branches,
+            "query": query,
+        }
+    )
+
 
 
 @login_required

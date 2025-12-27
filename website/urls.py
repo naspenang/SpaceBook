@@ -20,6 +20,7 @@ urlpatterns = [
     # Campus routes
     path("campus/list/", views_campus.campus_list, name="campus_list"),
     path("campus/create/", views_campus.campus_create, name="campus_create"),
-    path("campus/edit/<int:pk>/", views_campus.campus_edit, name="campus_edit"),
-    path("campus/delete/<int:pk>/", views_campus.campus_delete, name="campus_delete"),
+    path("campus/edit/<str:campus_code>/", views_campus.campus_edit, name="campus_edit"),
+    path("campus/delete/<str:campus_code>/", views_campus.campus_delete, name="campus_delete"),
+
 ]

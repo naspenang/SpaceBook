@@ -22,8 +22,8 @@ def campus_create(request):
 
 
 
-def campus_edit(request, pk):
-    campus = get_object_or_404(Campus, pk=pk)
+def campus_edit(request, campus_code):
+    campus = get_object_or_404(Campus, campus_code=campus_code)
     form = CampusForm(request.POST or None, instance=campus)
 
     if request.method == "POST" and form.is_valid():
@@ -36,9 +36,8 @@ def campus_edit(request, pk):
     })
 
 
-
-def campus_delete(request, pk):
-    campus = get_object_or_404(Campus, pk=pk)
+def campus_delete(request, campus_code):
+    campus = get_object_or_404(Campus, campus_code=campus_code)
 
     if request.method == "POST":
         campus.delete()
@@ -47,4 +46,5 @@ def campus_delete(request, pk):
     return render(request, "website/campus/campus_delete.html", {
         "campus": campus
     })
+
 

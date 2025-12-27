@@ -19,7 +19,7 @@ def branch_detail(request, code):
     branch = get_object_or_404(Branch, code=code)
 
     campuses = Campus.objects.filter(
-        branch_name=branch.name
+        branch=branch
     ).order_by("campus_name")
 
     return render(request, "website/branch/branch_detail.html", {
@@ -30,9 +30,13 @@ def branch_detail(request, code):
 
 
 def branch_list(request):
-    branches = Branch.objects.all().order_by("name")
+    query = request.GET.get("q", "")
 
-    view_mode = request.GET.get("view", "grid")  # default = grid
+    branches = Branch.objects.filter(
+        name__icontains=query
+    ).order_by("name")
+
+    view_mode = request.GET.get("view", "grid")
 
     return render(
         request,
@@ -40,13 +44,20 @@ def branch_list(request):
         {
             "branches": branches,
             "view_mode": view_mode,
+            "query": query,
         },
     )
 
 
+
 def branch_list_embed(request):
-    branches = Branch.objects.all().order_by("name")
-    view_mode = request.GET.get("view", "grid")  # default = grid
+    query = request.GET.get("q", "")
+
+    branches = Branch.objects.filter(
+        name__icontains=query
+    ).order_by("name")
+
+    view_mode = request.GET.get("view", "grid")
 
     return render(
         request,
@@ -54,8 +65,11 @@ def branch_list_embed(request):
         {
             "branches": branches,
             "view_mode": view_mode,
+            "query": query,
         },
     )
+
+
 
 
 @login_required
@@ -158,9 +172,13 @@ def save_branch_image(branch_code, uploaded_file):
 
     path = os.path.join(folder, filename)
 
-    image = Image.open(uploaded_file)
+    try:
+        image = Image.open(uploaded_file)
+    except Exception:
+        return  # invalid image file, silently ignore
 
-    if image.mode in ("RGBA", "P"):
+    # Convert ANY format to RGB so JPEG save is safe
+    if image.mode not in ("RGB",):
         image = image.convert("RGB")
 
     target_width = 600
@@ -170,11 +188,9 @@ def save_branch_image(branch_code, uploaded_file):
     target_ratio = target_width / target_height
 
     if img_ratio > target_ratio:
-        # image too wide → crop sides
         new_height = image.height
         new_width = int(new_height * target_ratio)
     else:
-        # image too tall → crop top/bottom
         new_width = image.width
         new_height = int(new_width / target_ratio)
 
@@ -184,8 +200,15 @@ def save_branch_image(branch_code, uploaded_file):
     bottom = top + new_height
 
     image = image.crop((left, top, right, bottom))
-    image = image.resize((target_width, target_height))
+    try:
+        resample = Image.Resampling.LANCZOS
+    except AttributeError:
+        resample = Image.LANCZOS # type: ignore[attr-defined]
 
+    image = image.resize((target_width, target_height), resample)
+
+
+    # ALWAYS saved as .jpg
     image.save(path, "JPEG", quality=85, optimize=True)
 
 

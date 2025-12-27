@@ -27,7 +27,7 @@ def get_location_choices():
 
 
 def validate_image_size(image):
-    max_size = 2
+    max_size = 10
     mb_converted = max_size * 1024 * 1024
     if image.size > mb_converted:
         raise forms.ValidationError(f"Image file too large (maximum {max_size}MB).")
@@ -37,7 +37,7 @@ class BranchForm(forms.ModelForm):
     image = forms.ImageField(
         required=False,
         validators=[
-            FileExtensionValidator(["jpg"]),
+            FileExtensionValidator(["jpg", "jpeg", "png", "webp"]),
             validate_image_size,
         ],
         widget=forms.ClearableFileInput(attrs={"class": "form-control"}),
@@ -97,12 +97,16 @@ class BranchForm(forms.ModelForm):
         return instance
 
 
+from .models import Campus, Branch
+
+
 class CampusForm(forms.ModelForm):
     class Meta:
         model = Campus
-        fields = ["branch_name", "campus_name", "city", "state", "role"]
+        fields = ["campus_code", "branch", "campus_name", "city", "state", "role"]
         widgets = {
-            "branch_name": forms.TextInput(attrs={"class": "form-control"}),
+            "campus_code": forms.TextInput(attrs={"class": "form-control"}),
+            "branch": forms.Select(attrs={"class": "form-control"}),
             "campus_name": forms.TextInput(attrs={"class": "form-control"}),
             "city": forms.TextInput(attrs={"class": "form-control"}),
             "state": forms.TextInput(attrs={"class": "form-control"}),

@@ -3,9 +3,43 @@
 {% block title %}Branches (Embed){% endblock %}
 
 {% block content %}
-  {% if view_mode == "list" %}
-    {% include "website/branch/_branch_list_table.html" %}
-  {% else %}
-    {% include "website/branch/_branch_grid.html" %}
-  {% endif %}
+
+<div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+
+  <!-- Search -->
+  <form method="get" class="d-flex gap-2">
+    <input type="text"
+           name="q"
+           value="{{ query }}"
+           class="form-control form-control-sm"
+           placeholder="Search branch...">
+
+    <input type="hidden" name="view" value="{{ view_mode }}">
+
+    <button class="btn btn-outline-primary btn-sm" type="submit">
+      <i class="bi bi-search"></i>
+    </button>
+  </form>
+
+  <!-- Grid / List toggle -->
+  <div class="btn-group">
+    <a href="?view=grid{% if query %}&q={{ query }}{% endif %}"
+       class="btn btn-outline-secondary btn-sm {% if view_mode == 'grid' %}active{% endif %}">
+      <i class="bi bi-grid-3x3-gap"></i>
+    </a>
+
+    <a href="?view=list{% if query %}&q={{ query }}{% endif %}"
+       class="btn btn-outline-secondary btn-sm {% if view_mode == 'list' %}active{% endif %}">
+      <i class="bi bi-list"></i>
+    </a>
+  </div>
+
+</div>
+
+{% if view_mode == "list" %}
+  {% include "website/branch/_branch_list_table.html" %}
+{% else %}
+  {% include "website/branch/_branch_grid.html" %}
+{% endif %}
+
 {% endblock %}

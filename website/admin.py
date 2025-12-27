@@ -12,7 +12,9 @@ class BranchAdmin(admin.ModelAdmin):
 
 @admin.register(Campus)
 class CampusAdmin(admin.ModelAdmin):
-    list_display = ("campus_name", "branch_name", "state", "role")
-    list_filter = ("state", "role")
-    search_fields = ("campus_name", "branch_name")
-    ordering = ("branch_name", "campus_name")
+    list_display = ("campus_code", "branch", "campus_name", "role")
+    ordering = ("branch__name", "campus_name")
+    list_filter = ("branch", "role")
+    search_fields = ("campus_code", "campus_name", "branch__name")
+
+

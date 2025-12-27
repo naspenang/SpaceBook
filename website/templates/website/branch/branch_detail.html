@@ -6,83 +6,95 @@
 {% block content %}
 <div class="container py-5">
 
-  <div class="row">
-    <div class="col-md-5">
-      <img src="{{ MEDIA_URL }}branches/{{ branch.code|lower }}.jpg"
-           class="img-fluid rounded shadow-sm"
-           alt="{{ branch.name }}"
-           onerror="this.src='{% static 'images/branch-placeholder.jpg' %}'">
-    </div>
+  <!-- =====================
+       Branch Info Section
+       ===================== -->
+<div class="row justify-content-center text-center">
+  <div class="col-md-6 mb-4">
+    <img src="{{ MEDIA_URL }}branches/{{ branch.code|lower }}.jpg"
+         class="img-fluid rounded shadow-sm mx-auto d-block"
+         alt="{{ branch.name }}"
+         onerror="this.src='{% static 'images/branch-placeholder.jpg' %}'">
+  </div>
 
-    <div class="col-md-7">
-      <h2 class="mb-3">{{ branch.name }}</h2>
+  <div class="col-md-8">
+    <h2 class="mb-3">{{ branch.name }}</h2>
 
-      <p class="mb-1">
-        <strong>Location:</strong> {{ branch.location|default:"-" }}
-      </p>
+    <p class="mb-1">
+      <strong>Location:</strong> {{ branch.location|default:"-" }}
+    </p>
 
-      {% if user.is_authenticated %}
+    {% if user.is_authenticated %}
       <p class="mb-3">
         <strong>Branch Code:</strong> {{ branch.code }}
       </p>
-      {% endif %}
+    {% endif %}
 
-      <a href="{% url 'home' %}" class="btn btn-secondary">
-        Back
+    <a href="{% url 'home' %}" class="btn btn-secondary">
+      Back
+    </a>
+
+    {% if user.is_authenticated %}
+      <a href="{% url 'branch_edit' branch.code %}"
+         class="btn btn-warning ms-2">
+        Edit
       </a>
-
-      {% if user.is_authenticated %}
-        <a href="{% url 'branch_edit' branch.code %}"
-           class="btn btn-warning ms-2">
-          Edit
-        </a>
-      {% endif %}
-    </div>
+    {% endif %}
   </div>
+</div>
 
-<hr class="my-4">
 
-<h4 class="mb-3">
-  <i class="bi bi-mortarboard-fill me-2"></i>
-  Campuses under this Branch
-</h4>
+  <hr class="my-4">
 
-{% if campuses %}
-  <div class="row g-3">
-    {% for c in campuses %}
-      <div class="col-md-6 col-lg-4">
-        <div class="card shadow-sm border-0 h-100">
-          <div class="card-body">
-            <h5 class="card-title">{{ c.campus_name }}</h5>
+  <!-- =====================
+       Campus Section Title
+       ===================== -->
+  <h4 class="mb-3">
+    <i class="bi bi-mortarboard-fill me-2"></i>
+    {{ branch.name }} Campuses
+  </h4>
 
-            <p class="mb-1 text-muted">
-              <i class="bi bi-geo-alt"></i>
-              {{ c.city }}, {{ c.state }}
-            </p>
+  <!-- =====================
+       ADD CAMPUS BUTTON
+       (moved here ✅)
+       ===================== -->
+  {% if user.is_authenticated %}
+    <a href="{% url 'campus_create' %}"
+       class="btn btn-sm btn-primary mb-3">
+      <i class="bi bi-plus-circle"></i>
+      Add Campus
+    </a>
+  {% endif %}
 
-            <span class="badge bg-secondary">
-              {{ c.role }}
-            </span>
+  <!-- =====================
+       Campus List / Empty State
+       ===================== -->
+  {% if campuses %}
+    <div class="row g-3">
+      {% for c in campuses %}
+        <div class="col-md-6 col-lg-4">
+          <div class="card shadow-sm border-0 h-100">
+            <div class="card-body">
+              <h5 class="card-title">{{ c.campus_name }}</h5>
+
+              <p class="mb-1 text-muted">
+                <i class="bi bi-geo-alt"></i>
+                {{ c.city }}, {{ c.state }}
+              </p>
+
+              <span class="badge bg-secondary">
+                {{ c.role }}
+              </span>
+            </div>
           </div>
         </div>
-      </div>
-    {% endfor %}
-  </div>
-{% else %}
-  <p class="text-muted">
-    No campuses have been added for this branch yet.
-  </p>
-
-  {% if user.is_authenticated %}
-  <a href="{% url 'campus_create' %}"
-     class="btn btn-sm btn-primary mb-3">
-    <i class="bi bi-plus-circle"></i>
-    Add Campus
-  </a>
-{% endif %}
-
-{% endif %}
-
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="text-muted">
+      No campuses have been added for this branch yet.
+    </p>
+  {% endif %}
 
 </div>
 {% endblock %}
