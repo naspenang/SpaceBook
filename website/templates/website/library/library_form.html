@@ -16,149 +16,229 @@
 
     <div class="row g-3">
 
-    <div class="col-md-4">
-        <label class="form-label">Branch</label>
-        {{ form.branch }}
-    </div>
-
-    <div class="col-md-8">
-        <label class="form-label">Campus</label>
-        {{ form.campus_code }}
-    </div>
-
-    <div class="col-md-4">
-        <label class="form-label">Library Code</label>
-        <div class="input-group">
-        <span class="input-group-text">
-            <i class="bi bi-hash"></i>
-        </span>
-        {{ form.library_code }}
-        </div>
-        <div class="text-danger">
-        {{ form.library_code.errors }}
-        </div>
-
-    <div class="text-danger">
-        {{ form.library_code.errors }}
-    </div>
-    </div>
-
-
-      <div class="col-12">
-        <label class="form-label">Library Name</label>
-        {{ form.library_name }}
-      </div>
-
-      <div class="col-md-6">
-        <label class="form-label">Short Name</label>
-        {{ form.short_name }}
-      </div>
-
-      <div class="col-md-6">
-        <label class="form-label">Library Type</label>
-        {{ form.library_type }}
-      </div>
-
-      <div class="col-12">
-        <label class="form-label">Address</label>
-        {{ form.address }}
-      </div>
-
+      <!-- Branch (select + icon) -->
       <div class="col-md-4">
-        <label class="form-label">City</label>
-        {{ form.city }}
-      </div>
-
-      <div class="col-md-4">
-        <label class="form-label">State</label>
-        {{ form.state }}
-      </div>
-
-      <div class="col-md-4">
-        <label class="form-label">Postcode</label>
-        {{ form.postcode }}
-      </div>
-
-      <div class="col-md-4">
-        <label class="form-label">Phone</label>
+        <label class="form-label d-flex align-items-center gap-1">
+          Branch
+          <i class="bi bi-info-circle text-muted"
+             data-bs-toggle="tooltip"
+             title="Select the branch this library belongs to."></i>
+        </label>
         <div class="input-group">
-        <span class="input-group-text">
-            <i class="bi bi-telephone"></i>
-        </span>
-        {{ form.phone }}
+          <span class="input-group-text"><i class="bi bi-diagram-3"></i></span>
+          {{ form.branch }}
         </div>
+        <div class="text-danger">{{ form.branch.errors }}</div>
       </div>
 
-      <div class="col-md-4">
-        <label class="form-label">Email</label>
-        <div class="input-group">
-        <span class="input-group-text">
-            <i class="bi bi-envelope"></i>
-        </span>
-        {{ form.email }}
-        </div>
-      </div>
-
-      <div class="col-md-4">
-        <label class="form-label">Website URL</label>
-        <div class="input-group">
-        <span class="input-group-text">
-            <i class="bi bi-globe"></i>
-        </span>
-        {{ form.website_url }}
-        </div>
-      </div>
-
-      <div class="col-md-6">
-        <label class="form-label">Opening Hours</label>
-        {{ form.opening_hours }}
-      </div>
-
-      <div class="col-md-6">
-        <label class="form-label">Weekend Hours</label>
-        {{ form.weekend_hours }}
-      </div>
-
-      <div class="col-12">
-        <label class="form-label">Notes</label>
-        {{ form.notes }}
-      </div>
-
-      <div class="col-md-6">
-        <label class="form-label">Latitude</label>
-        <div class="input-group">
-        <span class="input-group-text">
-            <i class="bi bi-geo-alt"></i>
-        </span>
-        {{ form.latitude }}
-        </div>
-      </div>
-
-      <div class="col-md-6">
-        <label class="form-label">Longitude</label>
-        <div class="input-group">
-        <span class="input-group-text">
-            <i class="bi bi-geo-alt"></i>
-        </span>
-        {{ form.longitude }}
-        </div>
-      </div>
-
+      <!-- Campus (select + icon) -->
       <div class="col-md-8">
-        <label class="form-label">Source URL</label>
-        {{ form.source_url }}
+        <label class="form-label d-flex align-items-center gap-1">
+          Campus
+          <i class="bi bi-info-circle text-muted"
+             data-bs-toggle="tooltip"
+             title="Campus will be filtered based on selected branch."></i>
+        </label>
+        <div class="input-group">
+          <span class="input-group-text"><i class="bi bi-mortarboard"></i></span>
+          {{ form.campus_code }}
+        </div>
+        <div class="text-danger">{{ form.campus_code.errors }}</div>
       </div>
 
+      <!-- Library Code -->
       <div class="col-md-4">
-        <label class="form-label">Last Verified</label>
-        {{ form.last_verified }}
+        <label class="form-label d-flex align-items-center gap-1">
+          Library Code
+          <i class="bi bi-info-circle text-muted"
+             data-bs-toggle="tooltip"
+             title="Unique identifier. Must not duplicate existing library codes."></i>
+        </label>
+        <div class="form-floating">
+          {{ form.library_code }}
+          <label>Library Code</label>
+        </div>
+        <div class="text-danger">{{ form.library_code.errors }}</div>
       </div>
 
-    </div>
+      <!-- Library Name -->
+      <div class="col-12">
+        <div class="form-floating">
+          {{ form.library_name }}
+          <label>Library Name</label>
+        </div>
+      </div>
 
-    <div class="text-danger mt-2">
-        {{ form.campus_code.errors }}
-        {{ form.branch.errors }}    
+      <!-- Short Name -->
+      <div class="col-md-6">
+        <div class="form-floating">
+          {{ form.short_name }}
+          <label>Short Name</label>
+        </div>
+      </div>
+
+      <!-- Library Type (select + icon) -->
+      <div class="col-md-6">
+        <label class="form-label d-flex align-items-center gap-1">
+          Library Type
+          <i class="bi bi-info-circle text-muted"
+             data-bs-toggle="tooltip"
+             title="Category of library for reporting and classification."></i>
+        </label>
+        <div class="input-group">
+          <span class="input-group-text"><i class="bi bi-collection"></i></span>
+          {{ form.library_type }}
+        </div>
+      </div>
+
+      <!-- Address -->
+      <div class="col-12">
+        <div class="form-floating">
+          {{ form.address }}
+          <label>Address</label>
+        </div>
+      </div>
+
+      <!-- City -->
+      <div class="col-md-4">
+        <div class="form-floating">
+          {{ form.city }}
+          <label>City</label>
+        </div>
+      </div>
+
+      <!-- State -->
+      <div class="col-md-4">
+        <div class="form-floating">
+          {{ form.state }}
+          <label>State</label>
+        </div>
+      </div>
+
+      <!-- Postcode -->
+      <div class="col-md-4">
+        <div class="form-floating">
+          {{ form.postcode }}
+          <label>Postcode</label>
+        </div>
+      </div>
+
+      <!-- Phone -->
+      <div class="col-md-4">
+        <div class="form-floating">
+          {{ form.phone }}
+          <label>Phone</label>
+        </div>
+      </div>
+
+      <!-- Email -->
+      <div class="col-md-4">
+        <div class="form-floating">
+          {{ form.email }}
+          <label>Email</label>
+        </div>
+      </div>
+
+      <!-- Website -->
+      <div class="col-md-4">
+        <div class="form-floating">
+          {{ form.website_url }}
+          <label>Website URL</label>
+        </div>
+      </div>
+
+      <!-- Opening Hours -->
+      <div class="col-md-6">
+        <label class="form-label d-flex align-items-center gap-1">
+          Opening Hours
+          <i class="bi bi-info-circle text-muted"
+             data-bs-toggle="tooltip"
+             title="Standard weekday operating hours."></i>
+        </label>
+        <div class="form-floating">
+          {{ form.opening_hours }}
+          <label>Opening Hours</label>
+        </div>
+      </div>
+
+      <!-- Weekend Hours -->
+      <div class="col-md-6">
+        <label class="form-label d-flex align-items-center gap-1">
+          Weekend Hours
+          <i class="bi bi-info-circle text-muted"
+             data-bs-toggle="tooltip"
+             title="Leave blank if closed on weekends."></i>
+        </label>
+        <div class="form-floating">
+          {{ form.weekend_hours }}
+          <label>Weekend Hours</label>
+        </div>
+      </div>
+
+      <!-- Notes -->
+      <div class="col-12">
+        <div class="form-floating">
+          {{ form.notes }}
+          <label>Notes</label>
+        </div>
+      </div>
+
+      <!-- Latitude -->
+      <div class="col-md-6">
+        <label class="form-label d-flex align-items-center gap-1">
+          Latitude
+          <i class="bi bi-info-circle text-muted"
+             data-bs-toggle="tooltip"
+             title="Decimal format, e.g. 5.3578"></i>
+        </label>
+        <div class="form-floating">
+          {{ form.latitude }}
+          <label>Latitude</label>
+        </div>
+      </div>
+
+      <!-- Longitude -->
+      <div class="col-md-6">
+        <label class="form-label d-flex align-items-center gap-1">
+          Longitude
+          <i class="bi bi-info-circle text-muted"
+             data-bs-toggle="tooltip"
+             title="Decimal format, e.g. 100.3012"></i>
+        </label>
+        <div class="form-floating">
+          {{ form.longitude }}
+          <label>Longitude</label>
+        </div>
+      </div>
+
+      <!-- Source URL -->
+      <div class="col-md-8">
+        <label class="form-label d-flex align-items-center gap-1">
+          Source URL
+          <i class="bi bi-info-circle text-muted"
+             data-bs-toggle="tooltip"
+             title="Official page where this information was verified."></i>
+        </label>
+        <div class="form-floating">
+          {{ form.source_url }}
+          <label>Source URL</label>
+        </div>
+      </div>
+
+      <!-- Last Verified -->
+      <div class="col-md-4">
+        <label class="form-label d-flex align-items-center gap-1">
+          Last Verified
+          <i class="bi bi-info-circle text-muted"
+             data-bs-toggle="tooltip"
+             title="Date this information was last confirmed."></i>
+        </label>
+        <div class="form-floating">
+          {{ form.last_verified }}
+          <label>Last Verified</label>
+        </div>
+      </div>
+
     </div>
 
     <div class="mt-4">
@@ -166,7 +246,6 @@
         <i class="bi bi-check-circle me-1"></i>
         Save Library
       </button>
-
       <a href="{% url 'library_list' %}" class="btn btn-secondary ms-2">
         Cancel
       </a>
@@ -175,45 +254,51 @@
   </form>
 </div>
 
+<!-- Campus filtering -->
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-    const branchSelect = document.getElementById("branch-select");
-    const campusSelect = document.getElementById("campus-select");
+document.addEventListener("DOMContentLoaded", function () {
+  const branchSelect = document.getElementById("branch-select");
+  const campusSelect = document.getElementById("campus-select");
 
-    if (!branchSelect || !campusSelect) return;
+  if (!branchSelect || !campusSelect) return;
 
-    function resetCampus() {
-        campusSelect.innerHTML = "";
-        const option = document.createElement("option");
-        option.value = "";
-        option.textContent = "Select Campus";
-        campusSelect.appendChild(option);
-    }
+  function resetCampus() {
+    campusSelect.innerHTML = "";
+    const opt = document.createElement("option");
+    opt.value = "";
+    opt.textContent = "Select Campus";
+    campusSelect.appendChild(opt);
+  }
 
+  resetCampus();
+
+  branchSelect.addEventListener("change", function () {
+    const branchCode = this.value;
     resetCampus();
+    if (!branchCode) return;
 
-    branchSelect.addEventListener("change", function () {
-        const branchCode = this.value;
-
-        resetCampus();
-
-        if (!branchCode) return;
-
-        fetch(`/spacebook/campus/api/by-branch/?branch=${branchCode}`)
-        .then(response => response.json())
-        .then(data => {
-            data.campuses.forEach(campus => {
-            const option = document.createElement("option");
-            option.value = campus.campus_code;
-            option.textContent = campus.campus_name;
-            campusSelect.appendChild(option);
-            });
-        })
-        .catch(err => {
-            console.error("Failed to load campuses:", err);
+    fetch(`/spacebook/campus/api/by-branch/?branch=${branchCode}`)
+      .then(r => r.json())
+      .then(data => {
+        data.campuses.forEach(c => {
+          const o = document.createElement("option");
+          o.value = c.campus_code;
+          o.textContent = c.campus_name;
+          campusSelect.appendChild(o);
         });
-    });
-    });
+      });
+  });
+});
+</script>
+
+<!-- Enable tooltips -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const tooltips = [].slice.call(
+    document.querySelectorAll('[data-bs-toggle="tooltip"]')
+  );
+  tooltips.map(el => new bootstrap.Tooltip(el));
+});
 </script>
 
 {% endblock %}
