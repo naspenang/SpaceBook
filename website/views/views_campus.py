@@ -1,6 +1,9 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from website.models import Campus
-from website.forms import CampusForm
+from website.forms.forms_campus import CampusForm
+from django.http import JsonResponse
+
+
 
 def campus_list(request):
     campuses = Campus.objects.all()
@@ -46,5 +49,28 @@ def campus_delete(request, campus_code):
     return render(request, "website/campus/campus_delete.html", {
         "campus": campus
     })
+
+
+#-----------------------
+#  API
+#-----------------------
+
+def campus_by_branch_api(request):
+    branch_code = request.GET.get("branch")
+
+    data = []
+
+    if branch_code:
+        campuses = Campus.objects.filter(
+            branch__code=branch_code
+        ).order_by("campus_name")
+
+        for c in campuses:
+            data.append({
+                "campus_code": c.campus_code,
+                "campus_name": c.campus_name,
+            })
+
+    return JsonResponse({"campuses": data})
 
 

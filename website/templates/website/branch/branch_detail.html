@@ -1,6 +1,25 @@
 {% extends "website/base.html" %}
 {% load static %}
 
+<style>
+  .add-item-circle {
+    width: 100px;
+    height: 100px;
+    font-size: 42px;
+    text-decoration: none;
+  }
+
+  .add-item-circle:hover {
+    transform: scale(1.05);
+  }
+
+  .cardh:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+    transition: box-shadow 0.2s ease-in-out;
+  }
+</style>
+
+
 {% block title %}{{ branch.name }} | SpaceBook{% endblock %}
 
 {% block content %}
@@ -54,38 +73,67 @@
     {{ branch.name }} Campuses
   </h4>
 
-  <!-- =====================
-       ADD CAMPUS BUTTON
-       (moved here ✅)
-       ===================== -->
-  {% if user.is_authenticated %}
-    <a href="{% url 'campus_create' %}"
-       class="btn btn-sm btn-primary mb-3">
-      <i class="bi bi-plus-circle"></i>
-      Add Campus
-    </a>
-  {% endif %}
 
   <!-- =====================
        Campus List / Empty State
        ===================== -->
   {% if campuses %}
-    <div class="row g-3">
+<div class="row g-3">
+
+  {% if user.is_authenticated %}
+  <div class="col-md-6 col-lg-4">
+    <div class="card shadow-sm border-0 h-100 cardh">
+      <div class="card-body text-center d-flex flex-column justify-content-center">
+
+        <a href="{% url 'campus_create' %}?branch={{ branch.code }}"
+           class="btn btn-outline-primary rounded-circle d-flex
+                  justify-content-center align-items-center mx-auto add-item-circle">
+          <i class="bi bi-mortarboard-fill"></i>
+        </a>
+
+        <h6 class="fw-semibold mt-3 mb-0">
+          Add New Campus
+        </h6>
+
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
       {% for c in campuses %}
         <div class="col-md-6 col-lg-4">
           <div class="card shadow-sm border-0 h-100">
-            <div class="card-body">
+            <div class="card-body d-flex flex-column">
+
               <h5 class="card-title">{{ c.campus_name }}</h5>
 
               <p class="mb-1 text-muted">
                 <i class="bi bi-geo-alt"></i>
-                {{ c.city }}, {{ c.state }}
+                {{ c.city|default:"-" }}, {{ c.state|default:"-" }}
               </p>
 
-              <span class="badge bg-secondary">
+              <span class="badge bg-secondary mb-3">
                 {{ c.role }}
               </span>
+
+              {% if user.is_authenticated %}
+                <div class="mt-auto d-flex gap-2">
+                  <a href="{% url 'campus_edit' c.campus_code %}"
+                    class="btn btn-sm btn-warning"
+                    title="Edit campus">
+                    <i class="bi bi-pencil"></i>
+                  </a>
+
+                  <a href="{% url 'campus_delete' c.campus_code %}"
+                    class="btn btn-sm btn-danger"
+                    title="Delete campus">
+                    <i class="bi bi-trash"></i>
+                  </a>
+                </div>
+              {% endif %}
+
             </div>
+
           </div>
         </div>
       {% endfor %}

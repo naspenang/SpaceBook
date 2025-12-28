@@ -1,7 +1,9 @@
+# website/urls.py
 from django.urls import path
 from .views import views
 from .views import views_branch
 from .views import views_campus
+from .views import views_library
 
 
 urlpatterns = [
@@ -22,5 +24,9 @@ urlpatterns = [
     path("campus/create/", views_campus.campus_create, name="campus_create"),
     path("campus/edit/<str:campus_code>/", views_campus.campus_edit, name="campus_edit"),
     path("campus/delete/<str:campus_code>/", views_campus.campus_delete, name="campus_delete"),
+    # Library routes
+    path("library/list/", views_library.library_list, name="library_list"),
+    path("library/create/", views_library.library_create, name="library_create"),
+    path("campus/api/by-branch/", views_campus.campus_by_branch_api, name="campus_by_branch_api",),
 
 ]

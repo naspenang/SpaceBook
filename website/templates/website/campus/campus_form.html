@@ -1,0 +1,75 @@
+{% extends "website/base.html" %}
+
+{% block title %}{{ title }} | SpaceBook{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+
+  <div class="d-flex align-items-center mb-4">
+    <h2 class="mb-0">
+      <i class="bi bi-mortarboard-fill me-2 text-primary"></i>
+      {{ title }}
+    </h2>
+    <hr class="flex-grow-1 ms-3">
+  </div>
+
+  <form method="post">
+    {% csrf_token %}
+
+    {{ form.non_field_errors }}
+
+    <!-- Campus Code -->
+    <div class="mb-3 required">
+      <label class="form-label">Campus Code</label>
+      {{ form.campus_code }}
+      {{ form.campus_code.errors }}
+    </div>
+
+    <!-- Branch -->
+    <div class="mb-3 required">
+      <label class="form-label">Branch</label>
+      {{ form.branch }}
+      {{ form.branch.errors }}
+    </div>
+
+    <!-- Campus Name -->
+    <div class="mb-3 required">
+      <label class="form-label">Campus Name</label>
+      {{ form.campus_name }}
+      {{ form.campus_name.errors }}
+    </div>
+
+    <!-- City -->
+    <div class="mb-3">
+      <label class="form-label">City</label>
+      {{ form.city }}
+      {{ form.city.errors }}
+    </div>
+
+    <!-- State -->
+    <div class="mb-3">
+      <label class="form-label">State</label>
+      {{ form.state }}
+      {{ form.state.errors }}
+    </div>
+
+    <!-- Role -->
+    <div class="mb-3 required">
+      <label class="form-label">Campus Role</label>
+      {{ form.role }}
+      {{ form.role.errors }}
+    </div>
+
+    <button type="submit" class="btn btn-primary">
+      <i class="bi bi-check-circle me-1"></i>
+      Save Campus
+    </button>
+
+    <a href="{% url 'campus_list' %}" class="btn btn-secondary ms-2">
+      <i class="bi bi-x-circle me-1"></i>
+      Cancel
+    </a>
+  </form>
+
+</div>
+{% endblock %}

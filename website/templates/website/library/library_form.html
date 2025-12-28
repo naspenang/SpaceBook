@@ -1,0 +1,219 @@
+{% extends "website/base.html" %}
+
+{% block title %}{{ title }} | SpaceBook{% endblock %}
+
+{% block content %}
+<div class="container py-5" style="max-width: 900px;">
+
+  <div class="d-flex align-items-center mb-4">
+    <h2 class="mb-0">{{ title }}</h2>
+    <hr class="flex-grow-1 ms-3">
+  </div>
+
+  <form method="post">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+
+    <div class="row g-3">
+
+    <div class="col-md-4">
+        <label class="form-label">Branch</label>
+        {{ form.branch }}
+    </div>
+
+    <div class="col-md-8">
+        <label class="form-label">Campus</label>
+        {{ form.campus_code }}
+    </div>
+
+    <div class="col-md-4">
+        <label class="form-label">Library Code</label>
+        <div class="input-group">
+        <span class="input-group-text">
+            <i class="bi bi-hash"></i>
+        </span>
+        {{ form.library_code }}
+        </div>
+        <div class="text-danger">
+        {{ form.library_code.errors }}
+        </div>
+
+    <div class="text-danger">
+        {{ form.library_code.errors }}
+    </div>
+    </div>
+
+
+      <div class="col-12">
+        <label class="form-label">Library Name</label>
+        {{ form.library_name }}
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Short Name</label>
+        {{ form.short_name }}
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Library Type</label>
+        {{ form.library_type }}
+      </div>
+
+      <div class="col-12">
+        <label class="form-label">Address</label>
+        {{ form.address }}
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label">City</label>
+        {{ form.city }}
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label">State</label>
+        {{ form.state }}
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label">Postcode</label>
+        {{ form.postcode }}
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label">Phone</label>
+        <div class="input-group">
+        <span class="input-group-text">
+            <i class="bi bi-telephone"></i>
+        </span>
+        {{ form.phone }}
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label">Email</label>
+        <div class="input-group">
+        <span class="input-group-text">
+            <i class="bi bi-envelope"></i>
+        </span>
+        {{ form.email }}
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label">Website URL</label>
+        <div class="input-group">
+        <span class="input-group-text">
+            <i class="bi bi-globe"></i>
+        </span>
+        {{ form.website_url }}
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Opening Hours</label>
+        {{ form.opening_hours }}
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Weekend Hours</label>
+        {{ form.weekend_hours }}
+      </div>
+
+      <div class="col-12">
+        <label class="form-label">Notes</label>
+        {{ form.notes }}
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Latitude</label>
+        <div class="input-group">
+        <span class="input-group-text">
+            <i class="bi bi-geo-alt"></i>
+        </span>
+        {{ form.latitude }}
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Longitude</label>
+        <div class="input-group">
+        <span class="input-group-text">
+            <i class="bi bi-geo-alt"></i>
+        </span>
+        {{ form.longitude }}
+        </div>
+      </div>
+
+      <div class="col-md-8">
+        <label class="form-label">Source URL</label>
+        {{ form.source_url }}
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label">Last Verified</label>
+        {{ form.last_verified }}
+      </div>
+
+    </div>
+
+    <div class="text-danger mt-2">
+        {{ form.campus_code.errors }}
+        {{ form.branch.errors }}    
+    </div>
+
+    <div class="mt-4">
+      <button type="submit" class="btn btn-primary">
+        <i class="bi bi-check-circle me-1"></i>
+        Save Library
+      </button>
+
+      <a href="{% url 'library_list' %}" class="btn btn-secondary ms-2">
+        Cancel
+      </a>
+    </div>
+
+  </form>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+    const branchSelect = document.getElementById("branch-select");
+    const campusSelect = document.getElementById("campus-select");
+
+    if (!branchSelect || !campusSelect) return;
+
+    function resetCampus() {
+        campusSelect.innerHTML = "";
+        const option = document.createElement("option");
+        option.value = "";
+        option.textContent = "Select Campus";
+        campusSelect.appendChild(option);
+    }
+
+    resetCampus();
+
+    branchSelect.addEventListener("change", function () {
+        const branchCode = this.value;
+
+        resetCampus();
+
+        if (!branchCode) return;
+
+        fetch(`/spacebook/campus/api/by-branch/?branch=${branchCode}`)
+        .then(response => response.json())
+        .then(data => {
+            data.campuses.forEach(campus => {
+            const option = document.createElement("option");
+            option.value = campus.campus_code;
+            option.textContent = campus.campus_name;
+            campusSelect.appendChild(option);
+            });
+        })
+        .catch(err => {
+            console.error("Failed to load campuses:", err);
+        });
+    });
+    });
+</script>
+
+{% endblock %}

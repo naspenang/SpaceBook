@@ -1,0 +1,44 @@
+{% extends "website/base.html" %}
+
+{% block title %}Libraries | SpaceBook{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0">Library Listing</h2>
+  </div>
+
+  {% if libraries %}
+    <div class="row g-3">
+      {% for library in libraries %}
+        <div class="col-md-6 col-lg-4">
+          <div class="card shadow-sm border-0 h-100">
+            <div class="card-body">
+
+              <h5 class="card-title mb-1">
+                {{ library.library_name }}
+              </h5>
+
+              <p class="text-muted mb-1">
+                {{ library.city|default:"-" }}
+                {% if library.state %}, {{ library.state }}{% endif %}
+              </p>
+
+              <span class="badge bg-secondary">
+                {{ library.library_code }}
+              </span>
+
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="text-muted">
+      No libraries found.
+    </p>
+  {% endif %}
+
+</div>
+{% endblock %}

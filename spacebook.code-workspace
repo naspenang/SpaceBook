@@ -24,7 +24,10 @@
     },
     "emmet.includeLanguages": {
       "django-html": "html"
-    }
+    },
+    "secondaryExplorer.paths": [
+      "d:\\DJANGO-PROJECTS\\SpaceBook"
+    ]
   },
   "extensions": {
     "recommendations": [
