@@ -1,12 +1,13 @@
 {% extends "website/base.html" %}
-{% load static %}
 
 {% block title %}Delete Campus | SpaceBook{% endblock %}
 
 {% block content %}
 <div class="container py-5">
-  <div class="card shadow-sm border-0 mx-auto" style="max-width: 500px;">
+  <div class="card shadow-sm border-0 mx-auto" style="max-width: 520px;">
     <div class="card-body text-center">
+
+      <i class="bi bi-exclamation-triangle text-danger fs-1 mb-3"></i>
 
       <h4 class="text-danger mb-3">Delete Campus</h4>
 
@@ -15,20 +16,15 @@
         <strong>{{ campus.campus_name }}</strong>?
       </p>
 
-      <p class="text-muted small">
+      <p class="text-muted small mb-4">
         This action cannot be undone.
       </p>
-
-      <div class="mb-3">
-        <span class="badge bg-secondary">
-          {{ campus.role }}
-        </span>
-      </div>
 
       <form method="post">
         {% csrf_token %}
 
         <button type="submit" class="btn btn-danger">
+          <i class="bi bi-trash me-1"></i>
           Yes, Delete
         </button>
 

@@ -3,73 +3,126 @@
 {% block title %}{{ title }} | SpaceBook{% endblock %}
 
 {% block content %}
-<div class="container py-5">
+<div class="container py-5" style="max-width: 800px;">
 
   <div class="d-flex align-items-center mb-4">
-    <h2 class="mb-0">
-      <i class="bi bi-mortarboard-fill me-2 text-primary"></i>
-      {{ title }}
-    </h2>
+    <h2 class="mb-0">{{ title }}</h2>
     <hr class="flex-grow-1 ms-3">
   </div>
 
   <form method="post">
     {% csrf_token %}
-
     {{ form.non_field_errors }}
 
-    <!-- Campus Code -->
-    <div class="mb-3 required">
-      <label class="form-label">Campus Code</label>
-      {{ form.campus_code }}
-      {{ form.campus_code.errors }}
+    <div class="row g-3">
+
+      <!-- Campus Code -->
+      <div class="col-md-4">
+        <label class="form-label d-flex align-items-center gap-1">
+          Campus Code
+          <i class="bi bi-info-circle text-muted"
+             data-bs-toggle="tooltip"
+             title="Unique identifier for this campus."></i>
+        </label>
+        <div class="form-floating">
+          {{ form.campus_code }}
+          <label>Campus Code</label>
+        </div>
+        <div class="text-danger">{{ form.campus_code.errors }}</div>
+      </div>
+
+      <!-- Branch -->
+      <div class="col-md-8">
+        <label class="form-label d-flex align-items-center gap-1">
+          Branch
+          <i class="bi bi-info-circle text-muted"
+             data-bs-toggle="tooltip"
+             title="Branch that this campus belongs to."></i>
+        </label>
+        <div class="input-group">
+          <span class="input-group-text">
+            <i class="bi bi-diagram-3"></i>
+          </span>
+          {{ form.branch }}
+        </div>
+        <div class="text-danger">{{ form.branch.errors }}</div>
+      </div>
+
+      <!-- Campus Name -->
+      <div class="col-12">
+        <div class="form-floating">
+          {{ form.campus_name }}
+          <label>Campus Name</label>
+        </div>
+        <div class="text-danger">{{ form.campus_name.errors }}</div>
+      </div>
+
+      <!-- City -->
+      <div class="col-md-6">
+        <div class="form-floating">
+          {{ form.city }}
+          <label>City</label>
+        </div>
+      </div>
+
+      <!-- State -->
+      <div class="col-md-6">
+        <div class="form-floating">
+          {{ form.state }}
+          <label>State</label>
+        </div>
+      </div>
+
+      <!-- Campus Role -->
+      <div class="col-md-6">
+        <label class="form-label d-flex align-items-center gap-1">
+          Campus Role
+          <i class="bi bi-info-circle text-muted"
+             data-bs-toggle="tooltip"
+             title="Defines the role or function of this campus."></i>
+        </label>
+        <div class="input-group">
+          <span class="input-group-text">
+            <i class="bi bi-person-badge"></i>
+          </span>
+          {{ form.role }}
+        </div>
+        <div class="text-danger">{{ form.role.errors }}</div>
+      </div>
+
     </div>
 
-    <!-- Branch -->
-    <div class="mb-3 required">
-      <label class="form-label">Branch</label>
-      {{ form.branch }}
-      {{ form.branch.errors }}
+    <div class="mt-4">
+      <button type="submit" class="btn btn-primary">
+        <i class="bi bi-check-circle me-1"></i>
+        Save Campus
+      </button>
+
+    {% if form.instance.branch %}
+      <a href="{% url 'branch_detail' form.instance.branch.code %}"
+        class="btn btn-secondary ms-2">
+        Cancel
+      </a>
+    {% else %}
+      <a href="{% url 'campus_list' %}"
+        class="btn btn-secondary ms-2">
+        Cancel
+      </a>
+    {% endif %}
+
     </div>
 
-    <!-- Campus Name -->
-    <div class="mb-3 required">
-      <label class="form-label">Campus Name</label>
-      {{ form.campus_name }}
-      {{ form.campus_name.errors }}
-    </div>
-
-    <!-- City -->
-    <div class="mb-3">
-      <label class="form-label">City</label>
-      {{ form.city }}
-      {{ form.city.errors }}
-    </div>
-
-    <!-- State -->
-    <div class="mb-3">
-      <label class="form-label">State</label>
-      {{ form.state }}
-      {{ form.state.errors }}
-    </div>
-
-    <!-- Role -->
-    <div class="mb-3 required">
-      <label class="form-label">Campus Role</label>
-      {{ form.role }}
-      {{ form.role.errors }}
-    </div>
-
-    <button type="submit" class="btn btn-primary">
-      <i class="bi bi-check-circle me-1"></i>
-      Save Campus
-    </button>
-
-    <a href="{% url 'campus_list' %}" class="btn btn-secondary ms-2">
-      <i class="bi bi-x-circle me-1"></i>
-      Cancel
-    </a>
   </form>
-
 </div>
+
+<!-- Enable tooltips -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const tooltips = [].slice.call(
+    document.querySelectorAll('[data-bs-toggle="tooltip"]')
+  );
+  tooltips.map(el => new bootstrap.Tooltip(el));
+});
+</script>
+
 {% endblock %}

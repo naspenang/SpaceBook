@@ -3,86 +3,67 @@
 {% block title %}Add Branch | SpaceBook{% endblock %}
 
 {% block content %}
+<div class="container py-5" style="max-width: 700px;">
 
-
-<div class="container py-5">
   <div class="d-flex align-items-center mb-4">
-    <h2 class="mb-0">
-      <i class="bi bi-building-add me-2 text-primary"></i>
-      Add New UiTM Branch
-    </h2>
+    <h2 class="mb-0">Add Branch</h2>
     <hr class="flex-grow-1 ms-3">
   </div>
 
   <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
-
     {{ form.non_field_errors }}
 
+    <!-- Branch Name -->
     <div class="mb-3 required">
       <div class="input-group">
         <span class="input-group-text">
           <i class="bi bi-building"></i>
         </span>
-        {{ form.name }}
+        <div class="form-floating flex-grow-1">
+          {{ form.name }}
+          <label>Branch Name</label>
+        </div>
       </div>
-      {{ form.name.errors }}
+      <div class="text-danger">{{ form.name.errors }}</div>
     </div>
 
-
+    <!-- Location -->
     <div class="mb-3 required">
       <div class="input-group">
         <span class="input-group-text">
           <i class="bi bi-geo-alt"></i>
         </span>
-        {{ form.location }}
+        <div class="form-floating flex-grow-1">
+          {{ form.location }}
+          <label>Location</label>
+        </div>
       </div>
-      {{ form.location.errors }}
+      <div class="text-danger">{{ form.location.errors }}</div>
     </div>
 
-
-
-
-
-
-  <div class="mb-3">
-    <div class="input-group">
-      <span class="input-group-text">
-        <i class="bi bi-image"></i>
-      </span>
-      {{ form.image }}
+    <!-- Image -->
+    <div class="mb-4">
+      <label class="form-label">Branch Image</label>
+      <div class="input-group">
+        <span class="input-group-text">
+          <i class="bi bi-image"></i>
+        </span>
+        {{ form.image }}
+      </div>
+      <div class="text-danger">{{ form.image.errors }}</div>
     </div>
-    {{ form.image.errors }}
-    <div class="form-text">
-      Optional. JPG only. Maximum size: 2MB.
+
+    <div class="mt-4">
+      <button type="submit" class="btn btn-primary">
+        <i class="bi bi-check-circle me-1"></i>
+        Save Branch
+      </button>
+
+      <a href="{% url 'branch_list' %}" class="btn btn-secondary ms-2">
+        Cancel
+      </a>
     </div>
-  </div>
-
-
-
-    <button type="submit" class="btn btn-primary">
-      <i class="bi bi-check-circle me-1"></i>
-      Save Branch
-    </button>
-
-    <a href="{% url 'home' %}" class="btn btn-secondary ms-2">
-      <i class="bi bi-x-circle me-1"></i>
-      Cancel
-    </a>
-
-
-    <script>
-    const form = document.querySelector("form");
-    if (form) {
-      form.addEventListener("submit", function () {
-        const buttons = form.querySelectorAll("button[type='submit']");
-        buttons.forEach(btn => {
-          btn.disabled = true;
-          btn.innerText = "Processing...";
-        });
-      });
-    }
-  </script>
 
   </form>
 </div>

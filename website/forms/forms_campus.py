@@ -14,10 +14,21 @@ class CampusForm(forms.ModelForm):
             "role",
         ]
         widgets = {
-            "campus_code": forms.TextInput(attrs={"class": "form-control"}),
-            "branch": forms.Select(attrs={"class": "form-control"}),
-            "campus_name": forms.TextInput(attrs={"class": "form-control"}),
-            "city": forms.TextInput(attrs={"class": "form-control"}),
-            "state": forms.TextInput(attrs={"class": "form-control"}),
-            "role": forms.Select(attrs={"class": "form-control"}),
-        }
+        "campus_code": forms.TextInput(attrs={
+            "class": "form-control",
+            "placeholder": "Campus Code"
+        }),
+        "campus_name": forms.TextInput(attrs={
+            "class": "form-control",
+            "placeholder": "Campus Name"
+        }),
+        "city": forms.TextInput(attrs={
+            "class": "form-control",
+            "placeholder": "City"
+        }),
+        "state": forms.TextInput(attrs={
+            "class": "form-control",
+            "placeholder": "State"
+        }),
+    }
+

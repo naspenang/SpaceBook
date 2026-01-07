@@ -1,0 +1,65 @@
+{% extends "website/base.html" %}
+{% load static %}
+
+{% block title %}Delete Library | SpaceBook{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="card shadow-sm border-0 mx-auto" style="max-width: 520px;">
+    <div class="card-body text-center">
+
+      <i class="bi bi-exclamation-triangle text-danger fs-1 mb-3"></i>
+
+      <h4 class="text-danger mb-3">Delete Library</h4>
+
+      <!-- Library Image -->
+      <div class="mb-3">
+        <img
+          src="{{ MEDIA_URL }}libraries/{{ library.library_code|lower }}.jpg"
+          class="img-thumbnail"
+          style="max-height: 160px;"
+          alt="{{ library.library_name }}"
+          onerror="this.src='{% static 'images/library-placeholder.jpg' %}'"
+        >
+      </div>
+
+      <p>
+        Are you sure you want to delete<br>
+        <strong>{{ library.library_name }}</strong>?
+      </p>
+
+      <p class="text-muted small mb-4">
+        This action cannot be undone.
+      </p>
+
+      <form method="post">
+        {% csrf_token %}
+
+        <button type="submit" class="btn btn-danger">
+          <i class="bi bi-trash me-1"></i>
+          Yes, Delete
+        </button>
+
+        <a href="{% url 'library_list' %}" class="btn btn-secondary ms-2">
+          Cancel
+        </a>
+
+        <script>
+          const form = document.querySelector("form");
+          if (form) {
+            form.addEventListener("submit", function () {
+              const buttons = form.querySelectorAll("button[type='submit']");
+              buttons.forEach(btn => {
+                btn.disabled = true;
+                btn.innerText = "Processing...";
+              });
+            });
+          }
+        </script>
+
+      </form>
+
+    </div>
+  </div>
+</div>
+{% endblock %}
