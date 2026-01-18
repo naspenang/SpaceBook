@@ -12,7 +12,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-#5f4fx2)y8tb_&*gko!*7m#e#g(e(=nf)0-7!2u=hp4it=g*)%"
 DEBUG = True
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = [
+    "127.0.0.1",
+    "localhost",
+    "spacebook.uitm.edu.my",
+    "online.library.uitm.edu.my"
+]
+
 
 # Application definition
 INSTALLED_APPS = [
