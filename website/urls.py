@@ -29,6 +29,8 @@ urlpatterns = [
     path("library/create/", views_library.library_create, name="library_create"),
     path("library/delete/<str:library_code>/", views_library.library_delete, name="library_delete"),
     path("campus/api/by-branch/", views_campus.campus_by_branch_api, name="campus_by_branch_api",),
+    path("library/<str:library_code>/", views_library.library_detail, name="library_detail"),
+
 
 
 ]

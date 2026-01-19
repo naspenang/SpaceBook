@@ -1,0 +1,46 @@
+{% extends "website/base.html" %}
+{% load static %}
+
+{% block title %}{{ library.library_name }} | SpaceBook{% endblock %}
+
+{% block content %}
+<div class="container py-5" style="max-width: 900px;">
+
+  <a href="{% url 'library_list' %}" class="btn btn-sm btn-outline-secondary mb-3">
+    ← Back to libraries
+  </a>
+
+  <div class="card shadow-sm border-0">
+
+    <img
+      src="{{ MEDIA_URL }}libraries/{{ library.library_code|lower }}.jpg"
+      class="card-img-top"
+      style="max-height: 320px; object-fit: cover;"
+      alt="{{ library.library_name }}"
+      onerror="this.src='{% static 'images/library-placeholder.jpg' %}'"
+    >
+
+    <div class="card-body">
+
+      <h3 class="mb-2">{{ library.library_name }}</h3>
+
+      <span class="badge bg-secondary mb-3">
+        {{ library.library_code }}
+      </span>
+
+      <p class="text-muted">
+        {{ library.city|default:"-" }}
+        {% if library.state %}, {{ library.state }}{% endif %}
+      </p>
+
+      <hr>
+
+      <p><strong>Address:</strong><br>{{ library.address|default:"-" }}</p>
+      <p><strong>Opening Hours:</strong><br>{{ library.opening_hours|default:"-" }}</p>
+      <p><strong>Weekend Hours:</strong><br>{{ library.weekend_hours|default:"-" }}</p>
+
+    </div>
+  </div>
+
+</div>
+{% endblock %}
