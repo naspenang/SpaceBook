@@ -34,6 +34,29 @@ def library_detail(request, library_code):
     )
 
 
+@login_required
+def library_edit(request, library_code):
+    library = get_object_or_404(Library, library_code=library_code)
+    form = LibraryForm(request.POST or None, request.FILES or None, instance=library)
+
+    if request.method == "POST" and form.is_valid():
+        library = form.save()
+
+        image = request.FILES.get("image")
+        if image:
+            save_library_image(library.library_code, image)
+
+        return redirect("library_detail", library_code=library.library_code)
+
+    return render(
+        request,
+        "website/library/library_form.html",
+        {
+            "form": form,
+            "title": "Edit Library",
+        }
+    )
+
 
 
 @login_required
