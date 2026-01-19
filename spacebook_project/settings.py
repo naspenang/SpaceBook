@@ -16,7 +16,8 @@ ALLOWED_HOSTS = [
     "127.0.0.1",
     "localhost",
     "spacebook.uitm.edu.my",
-    "online.library.uitm.edu.my"
+    "online.library.uitm.edu.my",
+    'naspenang.pythonanywhere.com',
 ]
 
 
