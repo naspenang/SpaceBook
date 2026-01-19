@@ -14,13 +14,15 @@
 
 <div class="position-relative">
 
-  <img
-    src="{{ MEDIA_URL }}libraries/{{ library.library_code|lower }}.jpg"
-    class="card-img-top"
-    style="max-height: 320px; object-fit: cover;"
-    alt="{{ library.library_name }}"
-    onerror="this.src='{% static 'images/library-placeholder.jpg' %}'"
-  >
+<img
+  src="{{ MEDIA_URL }}libraries/{{ library.library_code|lower }}.jpg"
+  class="card-img-top"
+  style="max-height: 320px; object-fit: cover;"
+  alt="{{ library.library_name }}"
+  loading="lazy"
+  onerror="this.src='{% static 'images/library-placeholder.jpg' %}'"
+/>
+
 {% if user.is_authenticated %}
   <div class="position-absolute top-0 end-0 m-3 d-flex gap-2">
 

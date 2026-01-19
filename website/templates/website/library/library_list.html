@@ -1,4 +1,4 @@
-{% extends "website/base.html" %}
+{% extends base_template %}
 {% load static %}
 
 {% block title %}Libraries | SpaceBook{% endblock %}
@@ -6,9 +6,66 @@
 {% block content %}
 <div class="container py-5">
 
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2 class="mb-0">Library Listing</h2>
-  </div>
+<div class="d-flex justify-content-between align-items-center mb-4">
+  {% if filters_visible %}
+  <h2 class="mb-0">UiTM Libraries</h2>
+
+<form method="get" class="d-flex align-items-center gap-2">
+  <input type="hidden" name="filters" value="1">
+
+  <!-- Branch filter (FIRST) -->
+  <select
+    name="branch"
+    class="form-select"
+    onchange="this.form.submit()"
+    style="min-width: 220px;"
+  >
+    <option value="">All Branches</option>
+
+    {% for branch in branches %}
+      <option
+        value="{{ branch.code }}"
+        {% if branch.code == selected_branch %}selected{% endif %}
+      >
+        {{ branch.name }}
+      </option>
+    {% endfor %}
+  </select>
+
+  <!-- Campus filter (DEPENDS ON BRANCH) -->
+  <select
+    name="campus"
+    class="form-select"
+    onchange="this.form.submit()"
+    style="min-width: 220px;"
+    {% if not selected_branch %}disabled{% endif %}
+  >
+    <option value="">All Campuses</option>
+
+    {% for campus in campuses %}
+      <option
+        value="{{ campus.campus_code }}"
+        {% if campus.campus_code == selected_campus %}selected{% endif %}
+      >
+        {{ campus.campus_name }}
+      </option>
+    {% endfor %}
+  </select>
+<a
+  href="?{{ embed_querystring }}"
+  target="_blank"
+  class="btn btn-outline-secondary btn-sm"
+  title="Open embedded view"
+>
+  <i class="bi bi-share-fill"></i>
+</a>
+
+
+</form>
+{% endif %}
+
+</div>
+
 
   {% if libraries %}
     <div class="row g-3">
@@ -25,8 +82,10 @@
                 class="card-img-top"
                 style="height: 160px; object-fit: cover;"
                 alt="{{ library.library_name }}"
+                loading="lazy"
                 onerror="this.src='{% static 'images/library-placeholder.jpg' %}'"
-              >
+              />
+
 
               <div class="card-body">
 
