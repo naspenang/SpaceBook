@@ -94,3 +94,112 @@ class Library(models.Model):
 
     def __str__(self):
         return f"{self.library_name} ({self.library_code})"
+
+
+
+# ------------------------------
+# Library Space Model
+# ------------------------------
+class LibrarySpace(models.Model):
+
+    # --- Choice definitions ---
+    SPACE_TYPES = [
+        ("study", "Study Area"),
+        ("discussion", "Discussion Room"),
+        ("media", "Media / Lab"),
+        ("reading", "Reading Area"),
+        ("other", "Other"),
+    ]
+
+    NOISE_LEVELS = [
+        ("quiet", "Quiet"),
+        ("moderate", "Moderate"),
+        ("loud", "Loud"),
+    ]
+
+    ACCESS_POLICIES = [
+        ("public", "Public"),
+        ("students", "Students Only"),
+        ("staff", "Staff Only"),
+        ("restricted", "Restricted"),
+    ]
+
+    # --- Identity ---
+    space_id = models.AutoField(primary_key=True)
+
+    library = models.ForeignKey(
+        Library,
+        to_field="library_code",
+        db_column="library_code",
+        on_delete=models.CASCADE,
+        related_name="spaces"
+    )
+
+
+    space_name = models.CharField(max_length=150)
+    description = models.TextField(blank=True)
+    room_number = models.CharField(max_length=50, blank=True)
+    floor = models.CharField(max_length=50, blank=True)
+    space_type = models.CharField(
+        max_length=20,
+        choices=SPACE_TYPES,
+        blank=True
+    )
+
+    is_active = models.BooleanField(default=True)
+
+    # --- Physical attributes ---
+    capacity = models.PositiveIntegerField()
+    has_projector = models.BooleanField(default=False)
+    has_whiteboard = models.BooleanField(default=False)
+    wheelchair_accessible = models.BooleanField(default=False)
+    has_climate_control = models.BooleanField(default=False)
+
+    noise_level = models.CharField(
+        max_length=20,
+        choices=NOISE_LEVELS,
+        blank=True
+    )
+
+    # --- Operational rules ---
+    available_from = models.TimeField()
+    available_to = models.TimeField()
+
+    buffer_minutes = models.PositiveIntegerField(default=0)
+    advance_notice = models.PositiveIntegerField(
+        null=True,
+        blank=True,
+        help_text="Hours before booking"
+    )
+
+    requires_payment = models.BooleanField(default=False)
+    fee_amount = models.DecimalField(
+        max_digits=8,
+        decimal_places=2,
+        null=True,
+        blank=True
+    )
+
+    # --- Policy ---
+    requires_approval = models.BooleanField(default=False)
+
+    access_policy = models.CharField(
+        max_length=20,
+        choices=ACCESS_POLICIES,
+        default="public"
+    )
+
+    booking_notes = models.TextField(blank=True)
+
+    # --- Metadata ---
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    last_use = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = "website_space"
+        ordering = ["space_name"]
+
+    def __str__(self):
+        return f"{self.space_name} ({self.library.library_code})"
