@@ -7,7 +7,7 @@ def save_library_image(library_code, uploaded_file):
     folder = os.path.join(settings.MEDIA_ROOT, "libraries")
     os.makedirs(folder, exist_ok=True)
 
-    image_path = os.path.join(folder, f"{library_code}.jpg")
+    image_path = os.path.join(folder, f"{library_code.lower()}.jpg")
 
     # Overwrite if already exists
     if os.path.exists(image_path):
