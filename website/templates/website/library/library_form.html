@@ -61,6 +61,35 @@
         <div class="text-danger">{{ form.library_code.errors }}</div>
       </div>
 
+      <!-- Library Image -->
+      <div class="col-12">
+        <label class="form-label">Library Image</label>
+
+        {% if form.instance.pk %}
+          <div class="mb-2">
+            <img
+              src="{{ MEDIA_URL }}libraries/{{ form.instance.library_code|lower }}.jpg"
+              class="img-thumbnail"
+              style="max-height: 160px;"
+              alt="{{ form.instance.library_name }}"
+              onerror="this.style.display='none'"
+            >
+          </div>
+        {% endif %}
+
+        <div class="input-group">
+          <span class="input-group-text">
+            <i class="bi bi-image"></i>
+          </span>
+          {{ form.image }}
+        </div>
+
+        <div class="text-danger">
+          {{ form.image.errors }}
+        </div>
+      </div>
+
+
       <!-- Library Name -->
       <div class="col-12">
         <div class="form-floating">

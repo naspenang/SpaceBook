@@ -1,6 +1,6 @@
 from django import forms
 from django.core.validators import FileExtensionValidator
-
+from website.validators import validate_image_size
 from website.models import Branch
 
 

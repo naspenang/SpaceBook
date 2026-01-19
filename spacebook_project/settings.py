@@ -158,3 +158,4 @@ LOGIN_URL = "/spacebook/oauth/login/google-oauth2/"
 LOGIN_REDIRECT_URL = "/spacebook/"
 LOGOUT_REDIRECT_URL = "/spacebook/"
 LOGOUT_URL = "/spacebook/accounts/logout/"
+

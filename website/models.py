@@ -1,9 +1,9 @@
 # website/models.py
 from django.db import models
 
-#------------------------------
+# ------------------------------
 # Branch Model
-#------------------------------
+# ------------------------------
 class Branch(models.Model):
     code = models.CharField(max_length=20, primary_key=True)
     name = models.CharField(max_length=255)
@@ -13,9 +13,9 @@ class Branch(models.Model):
         return f"{self.name} ({self.code})"
 
 
-#------------------------------
+# ------------------------------
 # Campus Model
-#------------------------------
+# ------------------------------
 class Campus(models.Model):
     ROLE_CHOICES = [
         ("HQ", "HQ"),
@@ -24,9 +24,7 @@ class Campus(models.Model):
     ]
 
     campus_code = models.CharField(
-        max_length=20,
-        primary_key=True,
-        help_text="Unique campus identifier"
+        max_length=20, primary_key=True, help_text="Unique campus identifier"
     )
 
     branch = models.ForeignKey(
@@ -37,26 +35,13 @@ class Campus(models.Model):
         related_name="campuses",
     )
 
+    campus_name = models.CharField(max_length=150, help_text="Official campus name")
 
-    campus_name = models.CharField(
-        max_length=150,
-        help_text="Official campus name"
-    )
+    city = models.CharField(max_length=100, blank=True)
 
-    city = models.CharField(
-        max_length=100,
-        blank=True
-    )
+    state = models.CharField(max_length=100, blank=True)
 
-    state = models.CharField(
-        max_length=100,
-        blank=True
-    )
-
-    role = models.CharField(
-        max_length=20,
-        choices=ROLE_CHOICES
-    )
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES)
 
     class Meta:
         db_table = "website_campus"
@@ -68,9 +53,9 @@ class Campus(models.Model):
         return f"{self.campus_name} ({self.campus_code})"
 
 
-#------------------------------
+# ------------------------------
 # Library Model
-#------------------------------
+# ------------------------------
 class Library(models.Model):
     # PRIMARY KEY
     library_code = models.CharField(max_length=50, primary_key=True)

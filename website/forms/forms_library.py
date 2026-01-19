@@ -1,3 +1,6 @@
+from django.core.validators import FileExtensionValidator
+from website.validators import validate_image_size
+
 from django import forms
 from website.models import Library, Campus, Branch
 from django.utils import timezone
@@ -99,21 +102,29 @@ class LibraryForm(forms.ModelForm):
     )
 
 
-
-
-
     library_type = forms.ChoiceField(
         choices=LIBRARY_TYPE_CHOICES,
         required=False,
         widget=forms.Select(attrs={"class": "form-control"}),
     )
 
+    image = forms.ImageField(
+        required=False,
+        validators=[
+            FileExtensionValidator(["jpg", "jpeg", "png", "webp"]),
+            validate_image_size,
+        ],
+        widget=forms.ClearableFileInput(
+            attrs={"class": "form-control"}
+        ),
+    )
 
 
     class Meta:
         model = Library
         fields = [
             "library_code",
+            "image",
             "branch",
             "campus_code",
             "library_name",
