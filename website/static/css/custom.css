@@ -7,3 +7,17 @@
   transform: translateY(-5px);
   transition: all 0.3s ease;
 }
+
+/* Hover glow effect for cards */
+.cardh {
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.cardh:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 0 0.75rem rgba(13, 110, 253, 0.25),
+    0 0 1.5rem rgba(13, 110, 253, 0.15);
+}

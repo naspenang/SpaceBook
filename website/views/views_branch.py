@@ -19,14 +19,17 @@ from website.models import Campus
 def branch_detail(request, code):
     branch = get_object_or_404(Branch, code=code)
 
-    campuses = Campus.objects.filter(
-        branch=branch
-    ).order_by("campus_name")
+    campuses = Campus.objects.filter(branch=branch).order_by("campus_name")
 
-    return render(request, "website/branch/branch_detail.html", {
-        "branch": branch,
-        "campuses": campuses
-    })
+    return render(
+        request,
+        "website/branch/branch_detail.html",
+        {
+            "branch": branch,
+            "campuses": campuses,
+        }
+    )
+
 
 
 
