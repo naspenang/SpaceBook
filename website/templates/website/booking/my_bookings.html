@@ -37,29 +37,42 @@
                 {{ booking.start_time }} – {{ booking.end_time }}
               </td>
                 <td>
+
+                <!-- Booking status -->
                 <span class="badge
-                    {% if booking.status == 'APPROVED' %}bg-success
-                    {% elif booking.status == 'PENDING' %}bg-warning text-dark
-                    {% elif booking.status == 'REJECTED' %}bg-danger
-                    {% else %}bg-secondary{% endif %}
+                  {% if booking.status == 'APPROVED' %}bg-success
+                  {% elif booking.status == 'PENDING' %}bg-warning text-dark
+                  {% elif booking.status == 'REJECTED' %}bg-danger
+                  {% else %}bg-secondary{% endif %}
                 ">
-                    {{ booking.get_status_display }}
+                  {{ booking.get_status_display }}
                 </span>
 
-                {% if booking.status != "CANCELLED" and booking.status != "REJECTED" %}
-                    <form
-                    action="{% url 'cancel_booking' booking.id %}"
-                    method="post"
-                    class="d-inline ms-2"
-                    onsubmit="return confirm('Cancel this booking?');"
-                    >
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-sm btn-outline-danger">
-                        Cancel
-                    </button>
-                    </form>
+                <!-- Payment status -->
+                {% if booking.space.requires_payment %}
+                  <div class="mt-1">
+                    <span class="badge
+                      {% if booking.payment_status == 'PAID' %}bg-success
+                      {% elif booking.payment_status == 'FAILED' %}bg-danger
+                      {% else %}bg-secondary{% endif %}
+                    ">
+                      {{ booking.payment_status }}
+                    </span>
+                  </div>
                 {% endif %}
-                </td>
+
+                <!-- Pay via FPX button -->
+                {% if booking.space.requires_payment and booking.payment_status == "UNPAID" %}
+                  <div class="mt-1">
+                    <a href="{% url 'fpx_start' booking.id %}"
+                      class="btn btn-sm btn-primary">
+                      Pay via FPX
+                    </a>
+                  </div>
+                {% endif %}
+
+              </td>
+
 
             </tr>
           {% endfor %}

@@ -1,0 +1,171 @@
+{% extends "website/base.html" %}
+
+{% block title %}Booking Report{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+
+  <h3 class="mb-4">Booking Report</h3>
+
+  <!-- Date range filter -->
+  <form method="get" class="row g-3 mb-4">
+    <div class="col-md-3">
+      <label class="form-label">From</label>
+      <input type="date" name="start_date"
+             value="{{ start_date }}"
+             class="form-control">
+    </div>
+
+    <div class="col-md-3">
+      <label class="form-label">To</label>
+      <input type="date" name="end_date"
+             value="{{ end_date }}"
+             class="form-control">
+    </div>
+
+    <div class="col-md-3 align-self-end">
+      <button class="btn btn-primary">Filter</button>
+      <a href="{% url 'booking_report' %}"
+         class="btn btn-outline-secondary">
+        Reset
+      </a>
+    </div>
+  </form>
+
+  <!-- Summary cards -->
+  <div class="row g-3 mb-4">
+    <div class="col-md-3">
+      <div class="card text-center">
+        <div class="card-body">
+          <h6>Total</h6>
+          <h3>{{ summary.total }}</h3>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card text-center">
+        <div class="card-body">
+          <h6>Approved</h6>
+          <h3 class="text-success">{{ summary.approved }}</h3>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card text-center">
+        <div class="card-body">
+          <h6>Pending</h6>
+          <h3 class="text-warning">{{ summary.pending }}</h3>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card text-center">
+        <div class="card-body">
+          <h6>Cancelled</h6>
+          <h3 class="text-secondary">{{ summary.cancelled }}</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Most booked spaces -->
+  <h5 class="mb-3">Most Booked Spaces</h5>
+
+  <table class="table table-sm table-striped mb-5">
+    <thead>
+      <tr>
+        <th>Space</th>
+        <th>Library</th>
+        <th>Total Bookings</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in top_spaces %}
+        <tr>
+          <td>{{ row.space__space_name }}</td>
+          <td>{{ row.space__library__library_name }}</td>
+          <td>{{ row.total }}</td>
+        </tr>
+      {% empty %}
+        <tr>
+          <td colspan="3" class="text-muted text-center">
+            No data
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <!-- Detailed booking records -->
+  <h5 class="mb-3">Detailed Booking Records</h5>
+
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped align-middle">
+      <thead>
+        <tr>
+          <th>Space</th>
+          <th>Library</th>
+          <th>Date</th>
+          <th>Time</th>
+          <th>Booking Status</th>
+          <th>Payment Status</th>
+          <th>FPX Ref</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for booking in bookings %}
+          <tr>
+            <td>{{ booking.space.space_name }}</td>
+            <td>{{ booking.space.library.library_name }}</td>
+            <td>{{ booking.booking_date }}</td>
+            <td>{{ booking.start_time }} – {{ booking.end_time }}</td>
+
+            <td>
+              <span class="badge
+                {% if booking.status == 'APPROVED' %}bg-success
+                {% elif booking.status == 'PENDING' %}bg-warning text-dark
+                {% elif booking.status == 'REJECTED' %}bg-danger
+                {% else %}bg-secondary{% endif %}
+              ">
+                {{ booking.get_status_display }}
+              </span>
+            </td>
+
+            <td>
+              {% if booking.space.requires_payment %}
+                <span class="badge
+                  {% if booking.payment_status == 'PAID' %}bg-success
+                  {% elif booking.payment_status == 'FAILED' %}bg-danger
+                  {% else %}bg-secondary{% endif %}
+                ">
+                  {{ booking.payment_status }}
+                </span>
+              {% else %}
+                <span class="text-muted">N/A</span>
+              {% endif %}
+            </td>
+
+            <td>
+              {% if booking.transaction_ref %}
+                <code>{{ booking.transaction_ref }}</code>
+              {% else %}
+                <span class="text-muted">–</span>
+              {% endif %}
+            </td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="7" class="text-muted text-center">
+              No booking records found
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+</div>
+{% endblock %}

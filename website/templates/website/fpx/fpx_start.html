@@ -1,0 +1,29 @@
+{% extends "website/base.html" %}
+
+{% block content %}
+<div class="container py-5" style="max-width:600px">
+
+  <h3>FPX Payment</h3>
+
+  <p>
+    Booking: <strong>{{ booking.space.space_name }}</strong><br>
+    Amount: <strong>RM {{ booking.space.fee_amount }}</strong>
+  </p>
+
+  <form method="post">
+    {% csrf_token %}
+
+    <label class="form-label">Select Bank</label>
+    <select class="form-select mb-3" required>
+      {% for bank in banks %}
+        <option>{{ bank }}</option>
+      {% endfor %}
+    </select>
+
+    <button class="btn btn-primary">
+      Proceed to Bank
+    </button>
+  </form>
+
+</div>
+{% endblock %}

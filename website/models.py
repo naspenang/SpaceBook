@@ -251,6 +251,29 @@ class Booking(models.Model):
         default="PENDING"
     )
 
+    PAYMENT_STATUS_CHOICES = [
+        ("UNPAID", "Unpaid"),
+        ("PAID", "Paid"),
+        ("FAILED", "Failed"),
+    ]
+
+    payment_status = models.CharField(
+        max_length=10,
+        choices=PAYMENT_STATUS_CHOICES,
+        default="UNPAID"
+    )
+
+    transaction_ref = models.CharField(
+        max_length=50,
+        blank=True,
+        null=True
+    )
+
+    paid_at = models.DateTimeField(
+        blank=True,
+        null=True
+    )
+
     # Metadata
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -268,3 +291,27 @@ class Booking(models.Model):
             f"{self.booking_date} "
             f"{self.start_time}-{self.end_time}"
         )
+
+# FPX simulation fields
+payment_method = models.CharField(
+    max_length=20,
+    default="FPX"
+)
+
+payment_status = models.CharField(
+    max_length=20,
+    choices=[
+        ("UNPAID", "Unpaid"),
+        ("PAID", "Paid"),
+        ("FAILED", "Failed"),
+    ],
+    default="UNPAID"
+)
+
+transaction_ref = models.CharField(
+    max_length=50,
+    null=True,
+    blank=True
+)
+
+paid_at = models.DateTimeField(null=True, blank=True)
