@@ -71,10 +71,17 @@ class LibraryForm(forms.ModelForm):
 
         # Last verified logic (unchanged)
         today = timezone.now().date()
-        if not self.instance.pk:
-            self.fields["last_verified"].initial = today
-        self.fields["last_verified"].widget.attrs["min"] = today
+
+        # Always prevent future dates
         self.fields["last_verified"].widget.attrs["max"] = today
+
+        # If editing and last_verified exists, lock minimum to stored value
+        if self.instance.pk and self.instance.last_verified:
+            self.fields["last_verified"].widget.attrs["min"] = self.instance.last_verified
+
+        # If creating and no value yet, default to today
+        if not self.instance.pk and not self.initial.get("last_verified"):
+            self.fields["last_verified"].initial = today
 
 
 
@@ -146,6 +153,7 @@ class LibraryForm(forms.ModelForm):
             "campus_code",
             "library_name",
             "short_name",
+            "library_type",
             "address",
             "city",
             "state",

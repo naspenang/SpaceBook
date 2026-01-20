@@ -69,6 +69,18 @@
 
   {% if libraries %}
     <div class="row g-3">
+
+      {% if user.is_authenticated %}
+
+        <div class="col-12 mb-3">
+          <a href="{% url 'library_create' %}"
+             class="btn btn-primary">
+            + Add Library
+          </a>
+        </div>
+
+      {% endif %}
+
       {% for library in libraries %}
         <div class="col-md-6 col-lg-4">
           <a href="{% url 'library_detail' library.library_code %}"

@@ -1,0 +1,76 @@
+{% extends "website/base.html" %}
+
+{% block title %}My Bookings | SpaceBook{% endblock %}
+
+{% block content %}
+<div class="container py-5" style="max-width: 900px;">
+
+  <h3 class="mb-4">My Bookings</h3>
+
+  {% if bookings %}
+    <div class="table-responsive">
+      <table class="table align-middle">
+        <thead>
+          <tr>
+            <th>Space</th>
+            <th>Library</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for booking in bookings %}
+            <tr>
+              <td>
+                <a href="{% url 'space_detail' booking.space.space_id %}">
+                  {{ booking.space.space_name }}
+                </a>
+              </td>
+              <td>
+                {{ booking.space.library.library_name }}
+              </td>
+              <td>
+                {{ booking.booking_date }}
+              </td>
+              <td>
+                {{ booking.start_time }} – {{ booking.end_time }}
+              </td>
+                <td>
+                <span class="badge
+                    {% if booking.status == 'APPROVED' %}bg-success
+                    {% elif booking.status == 'PENDING' %}bg-warning text-dark
+                    {% elif booking.status == 'REJECTED' %}bg-danger
+                    {% else %}bg-secondary{% endif %}
+                ">
+                    {{ booking.get_status_display }}
+                </span>
+
+                {% if booking.status != "CANCELLED" and booking.status != "REJECTED" %}
+                    <form
+                    action="{% url 'cancel_booking' booking.id %}"
+                    method="post"
+                    class="d-inline ms-2"
+                    onsubmit="return confirm('Cancel this booking?');"
+                    >
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                        Cancel
+                    </button>
+                    </form>
+                {% endif %}
+                </td>
+
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p class="text-muted">
+      You have no bookings yet.
+    </p>
+  {% endif %}
+
+</div>
+{% endblock %}

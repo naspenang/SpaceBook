@@ -8,8 +8,8 @@ from django.conf import settings
 
 
 def space_list(request):
-    library_code = request.GET.get("library")
-    campus_code = request.GET.get("campus")
+    library_code = request.GET.get("library") or None
+    campus_code = request.GET.get("campus") or None
     embed = request.GET.get("embed")
     is_embed = bool(embed)
 

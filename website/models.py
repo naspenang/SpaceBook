@@ -1,5 +1,7 @@
 # website/models.py
 from django.db import models
+from django.conf import settings
+
 
 # ------------------------------
 # Branch Model
@@ -207,3 +209,62 @@ class LibrarySpace(models.Model):
 
     def __str__(self):
         return f"{self.space_name} ({self.library.library_code})"
+
+
+# ------------------------------
+# Booking Model
+# ------------------------------
+class Booking(models.Model):
+
+    STATUS_CHOICES = [
+        ("PENDING", "Pending"),
+        ("APPROVED", "Approved"),
+        ("REJECTED", "Rejected"),
+        ("CANCELLED", "Cancelled"),
+    ]
+
+    # Who made the booking
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="bookings"
+    )
+
+    # Which space is booked
+    space = models.ForeignKey(
+        LibrarySpace,
+        to_field="space_id",
+        db_column="space_id",
+        on_delete=models.CASCADE,
+        related_name="bookings"
+    )
+
+    # When the booking happens
+    booking_date = models.DateField()
+    start_time = models.TimeField()
+    end_time = models.TimeField()
+
+    # Booking workflow status
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default="PENDING"
+    )
+
+    # Metadata
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = "website_booking"
+        ordering = ["-created_at"]
+        indexes = [
+            models.Index(fields=["space", "booking_date"]),
+        ]
+
+    def __str__(self):
+        return (
+            f"{self.space.space_name} | "
+            f"{self.booking_date} "
+            f"{self.start_time}-{self.end_time}"
+        )

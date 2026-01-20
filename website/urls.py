@@ -1,10 +1,14 @@
 # website/urls.py
 from django.urls import path
+
+from website.views.views_booking import booking_create
 from .views import views
 from .views import views_branch
 from .views import views_campus
 from .views import views_library
 from .views import views_space
+from website.views import views_booking
+
 
 
 urlpatterns = [
@@ -38,8 +42,13 @@ urlpatterns = [
     path("space/<int:space_id>/", views_space.space_detail, name="space_detail"),
     path("space/edit/<int:space_id>/", views_space.space_edit, name="space_edit"),
     path("space/delete/<int:space_id>/", views_space.space_delete, name="space_delete"),
-
-
-
+    # Booking routes
+    path("space/<int:space_id>/book/",views_booking.booking_create,name="booking_create"),
+    path("bookings/my/",views_booking.my_bookings,name="my_bookings"),
+    path("bookings/<int:booking_id>/cancel/",views_booking.cancel_booking,name="cancel_booking"),
+    # Admin Booking routes
+    path("bookings/pending/",views_booking.pending_bookings,name="pending_bookings"),
+    path("bookings/<int:booking_id>/approve/",views_booking.approve_booking,name="approve_booking"),
+    path("bookings/<int:booking_id>/reject/",views_booking.reject_booking,name="reject_booking"),
 
 ]

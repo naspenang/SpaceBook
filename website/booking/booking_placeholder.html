@@ -1,0 +1,12 @@
+{% extends "website/base.html" %}
+
+{% block content %}
+<div class="container py-5">
+  <h3>Booking: {{ space.space_name }}</h3>
+  <p>This booking page is coming next.</p>
+
+  <a href="{% url 'space_detail' space.space_id %}" class="btn btn-secondary">
+    ← Back to space
+  </a>
+</div>
+{% endblock %}

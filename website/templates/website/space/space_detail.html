@@ -6,6 +6,7 @@
 {% block content %}
 <div class="container py-5" style="max-width: 900px;">
 
+  <!-- Back button -->
   <a href="{% url 'space_list' %}" class="btn btn-sm btn-outline-secondary mb-3">
     ← Back to spaces
   </a>
@@ -14,7 +15,6 @@
 
     <!-- Hero image -->
     <div class="position-relative">
-
       <img
         src="{{ MEDIA_URL }}spaces/{{ space.space_id }}.jpg"
         class="card-img-top"
@@ -26,7 +26,6 @@
 
       {% if user.is_authenticated %}
         <div class="position-absolute top-0 end-0 m-3 d-flex gap-2">
-
           <a
             href="{% url 'space_edit' space.space_id %}"
             class="btn btn-sm btn-primary"
@@ -42,10 +41,8 @@
             <i class="bi bi-trash me-1"></i>
             Delete
           </a>
-
         </div>
       {% endif %}
-
     </div>
 
     <!-- Card body -->
@@ -62,6 +59,7 @@
         {{ space.library.campus.campus_name }}
       </p>
 
+      <!-- Basic badges -->
       <div class="d-flex gap-2 flex-wrap mb-3">
         <span class="badge bg-secondary">
           Capacity {{ space.capacity }}
@@ -88,9 +86,10 @@
 
       <hr>
 
-      <!-- Details & Booking rules -->
+      <!-- Details & booking rules -->
       <div class="row g-3">
 
+        <!-- Details -->
         <div class="col-md-6">
           <div class="card border-0 bg-light h-100">
             <div class="card-body p-3">
@@ -118,6 +117,7 @@
           </div>
         </div>
 
+        <!-- Booking rules -->
         <div class="col-md-6">
           <div class="card border-0 bg-light h-100">
             <div class="card-body p-3">
@@ -150,7 +150,6 @@
                   (RM {{ space.fee_amount }})
                 {% endif %}
               </p>
-
             </div>
           </div>
         </div>
@@ -164,6 +163,24 @@
             <h5 class="mb-2">Notes</h5>
             <p class="mb-0">{{ space.booking_notes }}</p>
           </div>
+        </div>
+      {% endif %}
+
+      <!-- BOOKING BUTTON -->
+      <hr>
+
+      {% if user.is_authenticated and space.is_active %}
+        <div class="d-grid">
+          <a
+            href="{% url 'booking_create' space.space_id %}"
+            class="btn btn-success btn-lg"
+          >
+            📅 Book This Space
+          </a>
+        </div>
+      {% elif not user.is_authenticated %}
+        <div class="alert alert-info mb-0">
+          Please log in to book this space.
         </div>
       {% endif %}
 

@@ -1,0 +1,58 @@
+{% extends "website/base.html" %}
+
+{% block title %}Pending Bookings{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+
+  <h3 class="mb-4">Pending Bookings</h3>
+
+  {% if bookings %}
+    <div class="table-responsive">
+      <table class="table align-middle">
+        <thead>
+          <tr>
+            <th>User</th>
+            <th>Space</th>
+            <th>Library</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for booking in bookings %}
+            <tr>
+              <td>{{ booking.user.username }}</td>
+              <td>{{ booking.space.space_name }}</td>
+              <td>{{ booking.space.library.library_name }}</td>
+              <td>{{ booking.booking_date }}</td>
+              <td>{{ booking.start_time }} – {{ booking.end_time }}</td>
+              <td class="d-flex gap-2">
+                <form method="post"
+                      action="{% url 'approve_booking' booking.id %}">
+                  {% csrf_token %}
+                  <button class="btn btn-sm btn-success">
+                    Approve
+                  </button>
+                </form>
+
+                <form method="post"
+                      action="{% url 'reject_booking' booking.id %}">
+                  {% csrf_token %}
+                  <button class="btn btn-sm btn-danger">
+                    Reject
+                  </button>
+                </form>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p class="text-muted">No pending bookings.</p>
+  {% endif %}
+
+</div>
+{% endblock %}

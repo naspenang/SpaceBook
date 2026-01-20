@@ -93,17 +93,43 @@
               <span class="d-lg-none">{{ user.first_name }}</span>
             </a>
 
-            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
-              <li><a class="dropdown-item" href="{% url 'profile' %}">Profile</a></li>
-              <li><hr class="dropdown-divider"></li>
-              <li>
-                <form action="{% url 'logout' %}?next={{ request.get_full_path|urlencode }}" 
-                      method="post" class="px-3 py-1">
-                  {% csrf_token %}
-                  <button type="submit" class="dropdown-item">Logout</button>
-                </form>
-              </li>
-            </ul>
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+
+          <li>
+            <a class="dropdown-item" href="{% url 'profile' %}">
+              Profile
+            </a>
+          </li>
+
+          <li>
+            <a class="dropdown-item" href="{% url 'my_bookings' %}">
+              My Bookings
+            </a>
+          </li>
+
+          {% if user.is_staff %}
+            <li>
+              <a class="dropdown-item" href="{% url 'pending_bookings' %}">
+                Pending Bookings
+              </a>
+            </li>
+          {% endif %}
+
+
+          <li><hr class="dropdown-divider"></li>
+
+          <li>
+            <form action="{% url 'logout' %}?next={{ request.get_full_path|urlencode }}" 
+                  method="post" class="px-3 py-1">
+              {% csrf_token %}
+              <button type="submit" class="dropdown-item">
+                Logout
+              </button>
+            </form>
+          </li>
+
+        </ul>
+
           </li>
 
         {% else %}

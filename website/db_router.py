@@ -28,3 +28,20 @@ class MainRouter:
         if app_label in self.route_app_labels:
             return db == "main"
         return db == "default"
+    
+    def allow_relation(self, obj1, obj2, **hints):
+        # Allow relations between website models and auth user
+        if (
+            obj1._meta.app_label == "website"
+            and obj2._meta.app_label == "auth"
+        ):
+            return True
+
+        if (
+            obj1._meta.app_label == "auth"
+            and obj2._meta.app_label == "website"
+        ):
+            return True
+
+        return None
+
