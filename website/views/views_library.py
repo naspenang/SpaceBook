@@ -98,7 +98,37 @@ def library_detail(request, library_code):
 @login_required
 def library_edit(request, library_code):
     library = get_object_or_404(Library, library_code=library_code)
-    form = LibraryForm(request.POST or None, request.FILES or None, instance=library)
+
+    initial = {}
+    campus_qs = Campus.objects.none()
+
+    if library.campus_code:
+        campus = (
+            Campus.objects
+            .select_related("branch")
+            .filter(campus_code=library.campus_code)
+            .first()
+        )
+
+        if campus:
+            initial["branch"] = campus.branch
+            initial["campus_code"] = campus.campus_code
+            campus_qs = Campus.objects.filter(branch=campus.branch)
+
+    if request.method == "POST":
+        form = LibraryForm(
+            request.POST,
+            request.FILES,
+            instance=library,
+            initial=initial,
+        )
+    else:
+        form = LibraryForm(
+            instance=library,
+            initial=initial,
+        )
+
+
 
     if request.method == "POST" and form.is_valid():
         library = form.save()
@@ -107,7 +137,10 @@ def library_edit(request, library_code):
         if image:
             save_library_image(library.library_code, image)
 
-        return redirect("library_detail", library_code=library.library_code)
+        return redirect(
+            "library_detail",
+            library_code=library.library_code
+        )
 
     return render(
         request,
@@ -117,7 +150,6 @@ def library_edit(request, library_code):
             "title": "Edit Library",
         }
     )
-
 
 
 @login_required
@@ -143,7 +175,7 @@ def library_create(request):
     )
 
 
-@login_required
+
 @login_required
 def library_delete(request, library_code):
     library = get_object_or_404(Library, library_code=library_code)

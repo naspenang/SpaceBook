@@ -36,26 +36,43 @@ class LibraryForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        # Populate campus dropdown
-        campuses = Campus.objects.all().order_by("campus_name")
+        # Always start with placeholder
         self.fields["campus_code"].choices = [
             ("", "Select Campus")
-        ] + [
-            (c.campus_code, c.campus_name)
-            for c in campuses
         ]
 
-        # Show branch name only (hide branch code)
+        branch = None
+
+        # Case 1: POST request (user submitted form)
+        if self.data.get("branch"):
+            branch = Branch.objects.filter(
+                code=self.data.get("branch")
+            ).first()
+
+
+        # Case 2: Edit existing record
+        elif self.instance.pk and self.instance.campus_code:
+            campus = Campus.objects.filter(
+                campus_code=self.instance.campus_code
+            ).select_related("branch").first()
+
+            if campus:
+                branch = campus.branch
+
+        # Populate campus choices ONLY if branch is known
+        if branch:
+            campuses = Campus.objects.filter(branch=branch).order_by("campus_name")
+            self.fields["campus_code"].choices += [
+                (c.campus_code, c.campus_name) for c in campuses
+            ]
+
+        # Branch label
         self.fields["branch"].label_from_instance = lambda obj: obj.name
 
-        # Today's date
+        # Last verified logic (unchanged)
         today = timezone.now().date()
-
-        # Default "Last Verified" to today (only for new records)
         if not self.instance.pk:
             self.fields["last_verified"].initial = today
-
-        # Restrict date picker to today only
         self.fields["last_verified"].widget.attrs["min"] = today
         self.fields["last_verified"].widget.attrs["max"] = today
 

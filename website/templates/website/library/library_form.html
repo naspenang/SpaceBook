@@ -1,10 +1,12 @@
 {% extends "website/base.html" %}
+{% load static %}
 
 {% block title %}{{ title }} | SpaceBook{% endblock %}
 
 {% block content %}
 <div class="container py-5" style="max-width: 900px;">
 
+  <!-- Page header -->
   <div class="d-flex align-items-center mb-4">
     <h2 class="mb-0">{{ title }}</h2>
     <hr class="flex-grow-1 ms-3">
@@ -14,46 +16,86 @@
     {% csrf_token %}
     {{ form.non_field_errors }}
 
+    <!-- ===============================
+         BASIC INFORMATION
+         =============================== -->
     <div class="row g-3">
 
-      <!-- Branch (select + icon) -->
-      <div class="col-md-4">
+      <!-- Branch -->
+      <div class="col-md-6">
         <label class="form-label d-flex align-items-center gap-1">
           Branch
           <i class="bi bi-info-circle text-muted"
              data-bs-toggle="tooltip"
-             title="Select the branch this library belongs to."></i>
+             title="Select the UiTM branch"></i>
         </label>
         <div class="input-group">
-          <span class="input-group-text"><i class="bi bi-diagram-3"></i></span>
+          <span class="input-group-text">
+            <i class="bi bi-diagram-3"></i>
+          </span>
           {{ form.branch }}
         </div>
         <div class="text-danger">{{ form.branch.errors }}</div>
       </div>
 
-      <!-- Campus (select + icon) -->
-      <div class="col-md-8">
+      <!-- Campus -->
+      <div class="col-md-6">
         <label class="form-label d-flex align-items-center gap-1">
           Campus
           <i class="bi bi-info-circle text-muted"
              data-bs-toggle="tooltip"
-             title="Campus will be filtered based on selected branch."></i>
+             title="Campus under the selected branch"></i>
         </label>
         <div class="input-group">
-          <span class="input-group-text"><i class="bi bi-mortarboard"></i></span>
+          <span class="input-group-text">
+            <i class="bi bi-mortarboard"></i>
+          </span>
           {{ form.campus_code }}
         </div>
         <div class="text-danger">{{ form.campus_code.errors }}</div>
       </div>
 
-      <!-- Library Code -->
-      <div class="col-md-4">
-        <label class="form-label d-flex align-items-center gap-1">
-          Library Code
-          <i class="bi bi-info-circle text-muted"
-             data-bs-toggle="tooltip"
-             title="Unique identifier. Must not duplicate existing library codes."></i>
-        </label>
+    </div>
+
+    <hr class="my-4">
+
+    <!-- ===============================
+         LIBRARY IMAGE
+         =============================== -->
+    <div class="mb-4">
+      <label class="form-label">Library Image</label>
+
+      {% if form.instance.pk %}
+        <div class="mb-2">
+          <img
+            src="{{ MEDIA_URL }}libraries/{{ form.instance.library_code }}.jpg"
+            class="img-thumbnail"
+            style="max-height: 160px;"
+            alt="{{ form.instance.library_name }}"
+            loading="lazy"
+            onerror="this.style.display='none'"
+          >
+        </div>
+      {% endif %}
+
+      <div class="input-group">
+        <span class="input-group-text">
+          <i class="bi bi-image"></i>
+        </span>
+        {{ form.image }}
+      </div>
+
+      <div class="text-danger">{{ form.image.errors }}</div>
+    </div>
+
+    <hr class="my-4">
+
+    <!-- ===============================
+         LIBRARY DETAILS
+         =============================== -->
+    <div class="row g-3">
+
+      <div class="col-md-6">
         <div class="form-floating">
           {{ form.library_code }}
           <label>Library Code</label>
@@ -61,46 +103,14 @@
         <div class="text-danger">{{ form.library_code.errors }}</div>
       </div>
 
-      <!-- Library Image -->
-      <div class="col-12">
-        <label class="form-label">Library Image</label>
-
-        {% if form.instance.pk %}
-          <div class="mb-2">
-            <img
-              src="{{ MEDIA_URL }}libraries/{{ form.instance.library_code|lower }}.jpg"
-              class="img-thumbnail"
-              style="max-height: 160px;"
-              alt="{{ form.instance.library_name }}"
-              loading="lazy"
-              onerror="this.style.display='none'"
-            >
-
-          </div>
-        {% endif %}
-
-        <div class="input-group">
-          <span class="input-group-text">
-            <i class="bi bi-image"></i>
-          </span>
-          {{ form.image }}
-        </div>
-
-        <div class="text-danger">
-          {{ form.image.errors }}
-        </div>
-      </div>
-
-
-      <!-- Library Name -->
-      <div class="col-12">
+      <div class="col-md-6">
         <div class="form-floating">
           {{ form.library_name }}
           <label>Library Name</label>
         </div>
+        <div class="text-danger">{{ form.library_name.errors }}</div>
       </div>
 
-      <!-- Short Name -->
       <div class="col-md-6">
         <div class="form-floating">
           {{ form.short_name }}
@@ -108,21 +118,21 @@
         </div>
       </div>
 
-      <!-- Library Type (select + icon) -->
       <div class="col-md-6">
         <label class="form-label d-flex align-items-center gap-1">
           Library Type
           <i class="bi bi-info-circle text-muted"
              data-bs-toggle="tooltip"
-             title="Category of library for reporting and classification."></i>
+             title="Type of library"></i>
         </label>
         <div class="input-group">
-          <span class="input-group-text"><i class="bi bi-collection"></i></span>
+          <span class="input-group-text">
+            <i class="bi bi-building"></i>
+          </span>
           {{ form.library_type }}
         </div>
       </div>
 
-      <!-- Address -->
       <div class="col-12">
         <div class="form-floating">
           {{ form.address }}
@@ -130,162 +140,54 @@
         </div>
       </div>
 
-      <!-- City -->
-      <div class="col-md-4">
-        <div class="form-floating">
-          {{ form.city }}
-          <label>City</label>
-        </div>
+    </div>
+
+    <hr class="my-4">
+
+    <!-- ===============================
+         STATUS
+         =============================== -->
+    <div class="row g-3">
+
+      <div class="col-md-6 d-flex align-items-center">
+        {{ form.is_active }} Active
       </div>
 
-      <!-- State -->
-      <div class="col-md-4">
-        <div class="form-floating">
-          {{ form.state }}
-          <label>State</label>
-        </div>
-      </div>
-
-      <!-- Postcode -->
-      <div class="col-md-4">
-        <div class="form-floating">
-          {{ form.postcode }}
-          <label>Postcode</label>
-        </div>
-      </div>
-
-      <!-- Phone -->
-      <div class="col-md-4">
-        <div class="form-floating">
-          {{ form.phone }}
-          <label>Phone</label>
-        </div>
-      </div>
-
-      <!-- Email -->
-      <div class="col-md-4">
-        <div class="form-floating">
-          {{ form.email }}
-          <label>Email</label>
-        </div>
-      </div>
-
-      <!-- Website -->
-      <div class="col-md-4">
-        <div class="form-floating">
-          {{ form.website_url }}
-          <label>Website URL</label>
-        </div>
-      </div>
-
-      <!-- Opening Hours -->
       <div class="col-md-6">
-        <label class="form-label d-flex align-items-center gap-1">
-          Opening Hours
-          <i class="bi bi-info-circle text-muted"
-             data-bs-toggle="tooltip"
-             title="Standard weekday operating hours."></i>
-        </label>
-        <div class="form-floating">
-          {{ form.opening_hours }}
-          <label>Opening Hours</label>
-        </div>
-      </div>
-
-      <!-- Weekend Hours -->
-      <div class="col-md-6">
-        <label class="form-label d-flex align-items-center gap-1">
-          Weekend Hours
-          <i class="bi bi-info-circle text-muted"
-             data-bs-toggle="tooltip"
-             title="Leave blank if closed on weekends."></i>
-        </label>
-        <div class="form-floating">
-          {{ form.weekend_hours }}
-          <label>Weekend Hours</label>
-        </div>
-      </div>
-
-      <!-- Notes -->
-      <div class="col-12">
-        <div class="form-floating">
-          {{ form.notes }}
-          <label>Notes</label>
-        </div>
-      </div>
-
-      <!-- Latitude -->
-      <div class="col-md-6">
-        <label class="form-label d-flex align-items-center gap-1">
-          Latitude
-          <i class="bi bi-info-circle text-muted"
-             data-bs-toggle="tooltip"
-             title="Decimal format, e.g. 5.3578"></i>
-        </label>
-        <div class="form-floating">
-          {{ form.latitude }}
-          <label>Latitude</label>
-        </div>
-      </div>
-
-      <!-- Longitude -->
-      <div class="col-md-6">
-        <label class="form-label d-flex align-items-center gap-1">
-          Longitude
-          <i class="bi bi-info-circle text-muted"
-             data-bs-toggle="tooltip"
-             title="Decimal format, e.g. 100.3012"></i>
-        </label>
-        <div class="form-floating">
-          {{ form.longitude }}
-          <label>Longitude</label>
-        </div>
-      </div>
-
-      <!-- Source URL -->
-      <div class="col-md-8">
-        <label class="form-label d-flex align-items-center gap-1">
-          Source URL
-          <i class="bi bi-info-circle text-muted"
-             data-bs-toggle="tooltip"
-             title="Official page where this information was verified."></i>
-        </label>
-        <div class="form-floating">
-          {{ form.source_url }}
-          <label>Source URL</label>
-        </div>
-      </div>
-
-      <!-- Last Verified -->
-      <div class="col-md-4">
-        <label class="form-label d-flex align-items-center gap-1">
-          Last Verified
-          <i class="bi bi-info-circle text-muted"
-             data-bs-toggle="tooltip"
-             title="Date this information was last confirmed."></i>
-        </label>
-        <div class="form-floating">
-          {{ form.last_verified }}
-          <label>Last Verified</label>
-        </div>
+        <label class="form-label">Last Verified</label>
+        {{ form.last_verified }}
       </div>
 
     </div>
 
+    <!-- ===============================
+         ACTIONS
+         =============================== -->
     <div class="mt-4">
       <button type="submit" class="btn btn-primary">
         <i class="bi bi-check-circle me-1"></i>
         Save Library
       </button>
-      <a href="{% url 'library_list' %}" class="btn btn-secondary ms-2">
-        Cancel
-      </a>
+
+      {% if form.instance.pk %}
+        <a class="btn btn-secondary ms-2"
+           href="{% url 'library_detail' form.instance.library_code %}">
+          Cancel
+        </a>
+      {% else %}
+        <a class="btn btn-secondary ms-2"
+           href="{% url 'library_list' %}">
+          Cancel
+        </a>
+      {% endif %}
     </div>
 
   </form>
 </div>
 
-<!-- Campus filtering -->
+<!-- ===============================
+     CAMPUS FILTERING (SINGLE SCRIPT)
+     =============================== -->
 <script>
 document.addEventListener("DOMContentLoaded", function () {
   const branchSelect = document.getElementById("branch-select");
@@ -301,16 +203,17 @@ document.addEventListener("DOMContentLoaded", function () {
     campusSelect.appendChild(opt);
   }
 
-  resetCampus();
-
   branchSelect.addEventListener("change", function () {
     const branchCode = this.value;
     resetCampus();
+
     if (!branchCode) return;
 
-    fetch(`/spacebook/campus/api/by-branch/?branch=${branchCode}`)
+    fetch(`/spacebook/campus/api/by-branch/?branch=${encodeURIComponent(branchCode)}`)
       .then(r => r.json())
       .then(data => {
+        if (!data || !data.campuses) return;
+
         data.campuses.forEach(c => {
           const o = document.createElement("option");
           o.value = c.campus_code;
@@ -322,7 +225,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 </script>
 
-<!-- Enable tooltips -->
+<!-- Tooltips -->
 <script>
 document.addEventListener("DOMContentLoaded", function () {
   const tooltips = [].slice.call(
