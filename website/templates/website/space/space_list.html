@@ -1,0 +1,87 @@
+{% extends base_template %}
+{% load static %}
+
+{% block title %}Library Spaces | SpaceBook{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+
+  <!-- Page title -->
+  <h2 class="mb-3">Library Spaces</h2>
+
+{% if filters_visible %}
+  <form method="get" class="d-flex align-items-center gap-2 flex-wrap mb-4">
+    {% include "website/space/_space_filters.html" %}
+  </form>
+{% endif %}
+
+
+  <!-- Result count -->
+  {% if spaces %}
+    <p class="text-muted mb-3">
+      {{ spaces|length }}
+      space{{ spaces|length|pluralize }}
+      found
+    </p>
+  {% endif %}
+
+  <!-- Space cards -->
+  {% if spaces %}
+    <div class="row g-3">
+      {% for space in spaces %}
+        <div class="col-md-6 col-lg-4">
+          <a
+            href="{% url 'space_detail' space.space_id %}"
+            class="text-decoration-none text-dark"
+          >
+            <div class="card shadow-sm border-0 h-100">
+
+              <!-- Placeholder image -->
+              <img
+                src="{% static 'images/space-placeholder.jpg' %}"
+                class="card-img-top"
+                style="height: 160px; object-fit: cover;"
+                alt="{{ space.space_name }}"
+                loading="lazy"
+              />
+
+              <div class="card-body">
+
+                <h5 class="card-title mb-1">
+                  {{ space.space_name }}
+                </h5>
+
+                <p class="text-muted mb-1">
+                  {{ space.library.library_name }}
+                </p>
+
+                <!-- Badges -->
+                <div class="d-flex gap-2 flex-wrap mb-1">
+                  <span class="badge bg-secondary">
+                    Capacity {{ space.capacity }}
+                  </span>
+
+                  {% if space.space_type %}
+                    <span class="badge bg-info text-dark">
+                      {{ space.get_space_type_display }}
+                    </span>
+                  {% endif %}
+                </div>
+
+                <!-- Amenity icons -->
+                {% include "website/space/_space_icons.html" %}
+
+              </div>
+            </div>
+          </a>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="text-muted">
+      No spaces found.
+    </p>
+  {% endif %}
+
+</div>
+{% endblock %}

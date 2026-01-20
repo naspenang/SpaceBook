@@ -1,0 +1,16 @@
+{% extends "website/base.html" %}
+{% block title %}Delete Space{% endblock %}
+{% block content %}
+<div class="container py-4">
+  <div class="card p-3">
+    <h2 class="mb-2">Delete Space</h2>
+    <p>Delete <strong>{{ space.space_name }}</strong>?</p>
+
+    <form method="post">
+      {% csrf_token %}
+      <button class="btn btn-danger" type="submit">Yes, delete</button>
+      <a class="btn btn-secondary" href="{% url 'space_detail' space.space_id %}">Cancel</a>
+    </form>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,72 @@
+{# website/space/_space_filters.html #}
+
+<form method="get" class="d-flex align-items-center gap-2 flex-wrap mb-4">
+
+  {# --- Preserve embed flag --- #}
+  {% if is_embed %}
+    <input type="hidden" name="embed" value="1">
+  {% endif %}
+
+  {# --- Preserve hidden filters in embed mode --- #}
+  {% if is_embed and selected_campus %}
+    <input type="hidden" name="campus" value="{{ selected_campus }}">
+  {% endif %}
+
+  {% if is_embed and selected_library %}
+    <input type="hidden" name="library" value="{{ selected_library.library_code }}">
+  {% endif %}
+
+  {# --- TOP FILTERS (hidden in embed) --- #}
+  {% if not is_embed %}
+
+    <select name="campus"
+            class="form-select"
+            onchange="this.form.submit()"
+            style="min-width:220px;">
+      <option value="">All Campuses</option>
+      {% for campus in campuses %}
+        <option value="{{ campus.campus_code }}"
+                {% if campus.campus_code == selected_campus %}selected{% endif %}>
+          {{ campus.campus_name }}
+        </option>
+      {% endfor %}
+    </select>
+
+    <select name="library"
+            class="form-select"
+            onchange="this.form.submit()"
+            style="min-width:220px;"
+            {% if not selected_campus %}disabled{% endif %}>
+      <option value="">All Libraries</option>
+      {% for lib in libraries %}
+        <option value="{{ lib.library_code }}"
+                {% if selected_library and lib.library_code == selected_library.library_code %}selected{% endif %}>
+          {{ lib.library_name }}
+        </option>
+      {% endfor %}
+    </select>
+
+  {% endif %}
+
+  {# --- AMENITY CHECKBOXES (always visible) --- #}
+
+  {% include "website/space/_space_filter_checkboxes.html" %}
+
+  {# --- ACTION BUTTONS --- #}
+  {% if not is_embed %}
+
+    {% if user.is_authenticated %}
+      <a href="{% url 'space_create' %}"
+         class="btn btn-primary btn-sm ms-2">
+        + Add Space
+      </a>
+    {% endif %}
+
+    <a href="?{{ embed_querystring }}"
+       target="_blank"
+       class="btn btn-outline-secondary btn-sm">
+      <i class="bi bi-share-fill"></i>
+    </a>
+
+  {% endif %}
+</form>

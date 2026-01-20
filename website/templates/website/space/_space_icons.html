@@ -1,0 +1,73 @@
+{# website/space/_space_icons.html #}
+
+{% if show_labels %}
+  <div class="d-flex gap-3 flex-wrap mt-3">
+{% else %}
+  <div class="d-flex gap-2 flex-wrap mt-2 text-muted">
+{% endif %}
+
+  {% if space.has_projector %}
+    <span title="Projector available">
+      <i class="bi bi-projector"></i>
+      {% if show_labels %} Projector{% endif %}
+    </span>
+  {% endif %}
+
+  {% if space.has_whiteboard %}
+    <span title="Whiteboard available">
+      <i class="bi bi-easel"></i>
+      {% if show_labels %} Whiteboard{% endif %}
+    </span>
+  {% endif %}
+
+    {% if space.has_wifi %}
+    <span data-bs-toggle="tooltip" title="Wi-Fi available">
+        <i class="bi bi-wifi"></i>
+        {% if show_labels %} Wi-Fi{% endif %}
+    </span>
+    {% endif %}
+
+    {% if space.has_power_plug %}
+    <span data-bs-toggle="tooltip" title="Power outlets available">
+        <i class="bi bi-plug"></i>
+        {% if show_labels %} Power plugs{% endif %}
+    </span>
+    {% endif %}
+
+    {% if space.has_network_node %}
+    <span data-bs-toggle="tooltip" title="Wired network access">
+        <i class="bi bi-ethernet"></i>
+        {% if show_labels %} Network node{% endif %}
+    </span>
+    {% endif %}
+
+
+  {% if space.wheelchair_accessible %}
+    <span title="Wheelchair accessible">
+      <i class="bi bi-universal-access"></i>
+      {% if show_labels %} Accessible{% endif %}
+    </span>
+  {% endif %}
+
+  {% if space.has_climate_control %}
+    <span title="Air-conditioned">
+      <i class="bi bi-thermometer-half"></i>
+      {% if show_labels %} Air-conditioned{% endif %}
+    </span>
+  {% endif %}
+
+  {% if space.requires_payment %}
+    <span title="Payment required">
+      <i class="bi bi-credit-card"></i>
+      {% if show_labels %} Paid{% endif %}
+    </span>
+  {% endif %}
+
+  {% if space.requires_approval %}
+    <span title="Approval required">
+      <i class="bi bi-shield-lock"></i>
+      {% if show_labels %} Approval required{% endif %}
+    </span>
+  {% endif %}
+
+</div>

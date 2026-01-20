@@ -4,6 +4,7 @@ from .views import views
 from .views import views_branch
 from .views import views_campus
 from .views import views_library
+from .views import views_space
 
 
 urlpatterns = [
@@ -31,6 +32,13 @@ urlpatterns = [
     path("campus/api/by-branch/", views_campus.campus_by_branch_api, name="campus_by_branch_api",),
     path("library/edit/<str:library_code>/", views_library.library_edit, name="library_edit"),
     path("library/<str:library_code>/", views_library.library_detail, name="library_detail"),
+    # Space routes
+    path("space/list/", views_space.space_list, name="space_list"),
+    path("space/create/", views_space.space_create, name="space_create"),
+    path("space/<int:space_id>/", views_space.space_detail, name="space_detail"),
+    path("space/edit/<int:space_id>/", views_space.space_edit, name="space_edit"),
+    path("space/delete/<int:space_id>/", views_space.space_delete, name="space_delete"),
+
 
 
 

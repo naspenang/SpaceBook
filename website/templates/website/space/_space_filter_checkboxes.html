@@ -1,0 +1,43 @@
+{# Amenity filters #}
+
+<div class="form-check form-check-inline ms-2">
+  <input class="form-check-input" type="checkbox" name="projector"
+         value="1" {% if has_projector %}checked{% endif %}
+         onchange="this.form.submit()">
+  <label class="form-check-label"><i class="bi bi-projector"></i></label>
+</div>
+
+<div class="form-check form-check-inline">
+  <input class="form-check-input" type="checkbox" name="whiteboard"
+         value="1" {% if has_whiteboard %}checked{% endif %}
+         onchange="this.form.submit()">
+  <label class="form-check-label"><i class="bi bi-easel"></i></label>
+</div>
+
+<div class="form-check form-check-inline">
+  <input class="form-check-input" type="checkbox" name="wifi"
+         value="1" {% if has_wifi %}checked{% endif %}
+         onchange="this.form.submit()">
+  <label class="form-check-label"><i class="bi bi-wifi"></i></label>
+</div>
+
+<div class="form-check form-check-inline">
+  <input class="form-check-input" type="checkbox" name="power"
+         value="1" {% if has_power %}checked{% endif %}
+         onchange="this.form.submit()">
+  <label class="form-check-label"><i class="bi bi-plug"></i></label>
+</div>
+
+<div class="form-check form-check-inline">
+  <input class="form-check-input" type="checkbox" name="network"
+         value="1" {% if has_network %}checked{% endif %}
+         onchange="this.form.submit()">
+  <label class="form-check-label"><i class="bi bi-ethernet"></i></label>
+</div>
+
+<div class="form-check form-check-inline">
+  <input class="form-check-input" type="checkbox" name="accessible"
+         value="1" {% if accessible %}checked{% endif %}
+         onchange="this.form.submit()">
+  <label class="form-check-label"><i class="bi bi-universal-access"></i></label>
+</div>

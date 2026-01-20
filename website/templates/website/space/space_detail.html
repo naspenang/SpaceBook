@@ -1,0 +1,61 @@
+{% extends "website/base.html" %}
+{% block title %}{{ space.space_name }}{% endblock %}
+{% block content %}
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-start mb-3">
+    <div>
+      <h2 class="mb-1">{{ space.space_name }}</h2>
+      <div class="text-muted">{{ space.library.library_name }}</div>
+    </div>
+
+    {% if user.is_authenticated %}
+      <div class="d-flex gap-2">
+        <a class="btn btn-outline-primary" href="{% url 'space_edit' space.space_id %}">Edit</a>
+        <a class="btn btn-outline-danger" href="{% url 'space_delete' space.space_id %}">Delete</a>
+      </div>
+    {% endif %}
+  </div>
+
+  {% if space.description %}
+    <p>{{ space.description }}</p>
+  {% endif %}
+
+  <div class="row g-3">
+    <div class="col-md-6">
+      <div class="card p-3">
+        <h5>Details</h5>
+        <ul class="mb-0">
+          <li>Room: {{ space.room_number|default:"-" }}</li>
+          <li>Floor: {{ space.floor|default:"-" }}</li>
+          <li>Capacity: {{ space.capacity }}</li>
+          <li>Noise: {% if space.noise_level %}{{ space.get_noise_level_display }}{% else %}-{% endif %}</li>
+          <li>Status: {{ space.is_active|yesno:"Active,Inactive" }}</li>
+        </ul>
+        {% include "website/space/_space_icons.html" with show_labels=True %}
+      </div>
+      
+
+    </div>
+
+    <div class="col-md-6">
+      <div class="card p-3">
+        <h5>Booking Rules</h5>
+        <ul class="mb-0">
+          <li>Hours: {{ space.available_from }} – {{ space.available_to }}</li>
+          <li>Buffer: {{ space.buffer_minutes }} mins</li>
+          <li>Advance notice: {{ space.advance_notice|default:"-" }} hours</li>
+          <li>Approval required: {{ space.requires_approval|yesno:"Yes,No" }}</li>
+          <li>Payment required: {{ space.requires_payment|yesno:"Yes,No" }}</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  {% if space.booking_notes %}
+    <div class="card p-3 mt-3">
+      <h5>Notes</h5>
+      <p class="mb-0">{{ space.booking_notes }}</p>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

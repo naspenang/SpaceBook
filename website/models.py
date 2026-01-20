@@ -154,6 +154,10 @@ class LibrarySpace(models.Model):
     has_whiteboard = models.BooleanField(default=False)
     wheelchair_accessible = models.BooleanField(default=False)
     has_climate_control = models.BooleanField(default=False)
+    has_wifi = models.BooleanField(default=False)
+    has_power_plug = models.BooleanField(default=False)
+    has_network_node = models.BooleanField(default=False)
+
 
     noise_level = models.CharField(
         max_length=20,
