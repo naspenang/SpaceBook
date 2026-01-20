@@ -1,61 +1,174 @@
 {% extends "website/base.html" %}
-{% block title %}{{ space.space_name }}{% endblock %}
+{% load static %}
+
+{% block title %}{{ space.space_name }} | SpaceBook{% endblock %}
+
 {% block content %}
-<div class="container py-4">
-  <div class="d-flex justify-content-between align-items-start mb-3">
-    <div>
-      <h2 class="mb-1">{{ space.space_name }}</h2>
-      <div class="text-muted">{{ space.library.library_name }}</div>
+<div class="container py-5" style="max-width: 900px;">
+
+  <a href="{% url 'space_list' %}" class="btn btn-sm btn-outline-secondary mb-3">
+    ← Back to spaces
+  </a>
+
+  <div class="card shadow-sm border-0">
+
+    <!-- Hero image -->
+    <div class="position-relative">
+
+      <img
+        src="{{ MEDIA_URL }}spaces/{{ space.space_id }}.jpg"
+        class="card-img-top"
+        style="max-height: 320px; object-fit: cover;"
+        alt="{{ space.space_name }}"
+        loading="lazy"
+        onerror="this.src='{% static 'images/space-placeholder.jpg' %}'"
+      />
+
+      {% if user.is_authenticated %}
+        <div class="position-absolute top-0 end-0 m-3 d-flex gap-2">
+
+          <a
+            href="{% url 'space_edit' space.space_id %}"
+            class="btn btn-sm btn-primary"
+          >
+            <i class="bi bi-pencil-square me-1"></i>
+            Edit
+          </a>
+
+          <a
+            href="{% url 'space_delete' space.space_id %}"
+            class="btn btn-sm btn-danger"
+          >
+            <i class="bi bi-trash me-1"></i>
+            Delete
+          </a>
+
+        </div>
+      {% endif %}
+
     </div>
 
-    {% if user.is_authenticated %}
-      <div class="d-flex gap-2">
-        <a class="btn btn-outline-primary" href="{% url 'space_edit' space.space_id %}">Edit</a>
-        <a class="btn btn-outline-danger" href="{% url 'space_delete' space.space_id %}">Delete</a>
+    <!-- Card body -->
+    <div class="card-body">
+
+      <h3 class="mb-2">{{ space.space_name }}</h3>
+
+      <span class="badge bg-secondary mb-3">
+        Space ID {{ space.space_id }}
+      </span>
+
+      <p class="text-muted mb-2">
+        {{ space.library.library_name }}<br>
+        {{ space.library.campus.campus_name }}
+      </p>
+
+      <div class="d-flex gap-2 flex-wrap mb-3">
+        <span class="badge bg-secondary">
+          Capacity {{ space.capacity }}
+        </span>
+
+        {% if space.space_type %}
+          <span class="badge bg-info text-dark">
+            {{ space.get_space_type_display }}
+          </span>
+        {% endif %}
+
+        <span class="badge {% if space.is_active %}bg-success{% else %}bg-secondary{% endif %}">
+          {{ space.is_active|yesno:"Active,Inactive" }}
+        </span>
       </div>
-    {% endif %}
+
+      <!-- Amenities -->
+      {% include "website/space/_space_icons.html" with show_labels=True %}
+
+      {% if space.description %}
+        <hr>
+        <p class="mb-0">{{ space.description }}</p>
+      {% endif %}
+
+      <hr>
+
+      <!-- Details & Booking rules -->
+      <div class="row g-3">
+
+        <div class="col-md-6">
+          <div class="card border-0 bg-light h-100">
+            <div class="card-body p-3">
+              <h5 class="mb-3">Details</h5>
+
+              <p class="mb-2">
+                <strong>Room:</strong><br>
+                {{ space.room_number|default:"-" }}
+              </p>
+
+              <p class="mb-2">
+                <strong>Floor:</strong><br>
+                {{ space.floor|default:"-" }}
+              </p>
+
+              <p class="mb-0">
+                <strong>Noise level:</strong><br>
+                {% if space.noise_level %}
+                  {{ space.get_noise_level_display }}
+                {% else %}
+                  -
+                {% endif %}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="card border-0 bg-light h-100">
+            <div class="card-body p-3">
+              <h5 class="mb-3">Booking rules</h5>
+
+              <p class="mb-2">
+                <strong>Available hours:</strong><br>
+                {{ space.available_from }} – {{ space.available_to }}
+              </p>
+
+              <p class="mb-2">
+                <strong>Buffer:</strong><br>
+                {{ space.buffer_minutes }} mins
+              </p>
+
+              <p class="mb-2">
+                <strong>Advance notice:</strong><br>
+                {{ space.advance_notice|default:"-" }} hours
+              </p>
+
+              <p class="mb-2">
+                <strong>Approval required:</strong><br>
+                {{ space.requires_approval|yesno:"Yes,No" }}
+              </p>
+
+              <p class="mb-0">
+                <strong>Payment required:</strong><br>
+                {{ space.requires_payment|yesno:"Yes,No" }}
+                {% if space.requires_payment and space.fee_amount %}
+                  (RM {{ space.fee_amount }})
+                {% endif %}
+              </p>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      {% if space.booking_notes %}
+        <hr>
+        <div class="card border-0 bg-light">
+          <div class="card-body p-3">
+            <h5 class="mb-2">Notes</h5>
+            <p class="mb-0">{{ space.booking_notes }}</p>
+          </div>
+        </div>
+      {% endif %}
+
+    </div>
   </div>
 
-  {% if space.description %}
-    <p>{{ space.description }}</p>
-  {% endif %}
-
-  <div class="row g-3">
-    <div class="col-md-6">
-      <div class="card p-3">
-        <h5>Details</h5>
-        <ul class="mb-0">
-          <li>Room: {{ space.room_number|default:"-" }}</li>
-          <li>Floor: {{ space.floor|default:"-" }}</li>
-          <li>Capacity: {{ space.capacity }}</li>
-          <li>Noise: {% if space.noise_level %}{{ space.get_noise_level_display }}{% else %}-{% endif %}</li>
-          <li>Status: {{ space.is_active|yesno:"Active,Inactive" }}</li>
-        </ul>
-        {% include "website/space/_space_icons.html" with show_labels=True %}
-      </div>
-      
-
-    </div>
-
-    <div class="col-md-6">
-      <div class="card p-3">
-        <h5>Booking Rules</h5>
-        <ul class="mb-0">
-          <li>Hours: {{ space.available_from }} – {{ space.available_to }}</li>
-          <li>Buffer: {{ space.buffer_minutes }} mins</li>
-          <li>Advance notice: {{ space.advance_notice|default:"-" }} hours</li>
-          <li>Approval required: {{ space.requires_approval|yesno:"Yes,No" }}</li>
-          <li>Payment required: {{ space.requires_payment|yesno:"Yes,No" }}</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-
-  {% if space.booking_notes %}
-    <div class="card p-3 mt-3">
-      <h5>Notes</h5>
-      <p class="mb-0">{{ space.booking_notes }}</p>
-    </div>
-  {% endif %}
 </div>
 {% endblock %}

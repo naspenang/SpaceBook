@@ -1,16 +1,292 @@
 {% extends "website/base.html" %}
-{% block title %}{{ title }}{% endblock %}
-{% block content %}
-<div class="container py-4">
-  <h2 class="mb-3">{{ title }}</h2>
+{% load static %}
 
-  <form method="post" class="card p-3">
+{% block title %}{{ title }} | SpaceBook{% endblock %}
+
+{% block content %}
+<div class="container py-5" style="max-width: 900px;">
+
+  <!-- Page header (MATCHES LIBRARY FORM) -->
+  <div class="d-flex align-items-center mb-4">
+    <h2 class="mb-0">{{ title }}</h2>
+    <hr class="flex-grow-1 ms-3">
+  </div>
+
+  <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
-    {{ form.as_p }}
-    <div class="d-flex gap-2">
-      <button class="btn btn-primary" type="submit">Save</button>
-      <a class="btn btn-secondary" href="{% url 'space_list' %}">Cancel</a>
+    {{ form.non_field_errors }}
+
+    <!-- ===============================
+         BASIC INFORMATION
+         =============================== -->
+    <div class="row g-3">
+
+      <!-- Library -->
+      <div class="col-md-6">
+        <label class="form-label d-flex align-items-center gap-1">
+          Library
+          <i class="bi bi-info-circle text-muted"
+             data-bs-toggle="tooltip"
+             title="Library this space belongs to"></i>
+        </label>
+        <div class="input-group">
+          <span class="input-group-text">
+            <i class="bi bi-building"></i>
+          </span>
+          {{ form.library }}
+        </div>
+        <div class="text-danger">{{ form.library.errors }}</div>
+      </div>
+
+      <!-- Space Name -->
+      <div class="col-md-6">
+        <label class="form-label d-flex align-items-center gap-1">
+          Space Name
+          <i class="bi bi-info-circle text-muted"
+             data-bs-toggle="tooltip"
+             title="Official name of the space"></i>
+        </label>
+        <div class="input-group">
+          <span class="input-group-text">
+            <i class="bi bi-door-open"></i>
+          </span>
+          {{ form.space_name }}
+        </div>
+        <div class="text-danger">{{ form.space_name.errors }}</div>
+      </div>
+
     </div>
+
+    <hr class="my-4">
+
+    <!-- ===============================
+         SPACE IMAGE (MATCHES LIBRARY)
+         =============================== -->
+    <div class="mb-4">
+      <label class="form-label">Space Image</label>
+
+      {% if form.instance.pk %}
+        <div class="mb-2">
+          <img
+            src="{{ MEDIA_URL }}spaces/{{ form.instance.space_id }}.jpg"
+            class="img-thumbnail"
+            style="max-height: 160px;"
+            alt="{{ form.instance.space_name }}"
+            loading="lazy"
+            onerror="this.style.display='none'"
+          >
+        </div>
+      {% endif %}
+
+      <div class="input-group">
+        <span class="input-group-text">
+          <i class="bi bi-image"></i>
+        </span>
+        {{ form.image }}
+      </div>
+
+      <div class="text-danger">
+        {{ form.image.errors }}
+      </div>
+    </div>
+
+    <hr class="my-4">
+
+    <!-- ===============================
+         DESCRIPTION & LOCATION
+         =============================== -->
+    <div class="row g-3">
+
+      <div class="col-12">
+        <div class="form-floating">
+          {{ form.description }}
+          <label>Description</label>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="form-floating">
+          {{ form.room_number }}
+          <label>Room Number</label>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="form-floating">
+          {{ form.floor }}
+          <label>Floor</label>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="form-floating">
+          {{ form.capacity }}
+          <label>Capacity</label>
+        </div>
+      </div>
+
+    </div>
+
+    <hr class="my-4">
+
+    <!-- ===============================
+         CLASSIFICATION
+         =============================== -->
+    <div class="row g-3">
+
+      <div class="col-md-6">
+        <label class="form-label d-flex align-items-center gap-1">
+          Space Type
+          <i class="bi bi-info-circle text-muted"
+             data-bs-toggle="tooltip"
+             title="Type of space for categorisation"></i>
+        </label>
+        <div class="input-group">
+          <span class="input-group-text">
+            <i class="bi bi-grid"></i>
+          </span>
+          {{ form.space_type }}
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label d-flex align-items-center gap-1">
+          Noise Level
+          <i class="bi bi-info-circle text-muted"
+             data-bs-toggle="tooltip"
+             title="Expected noise level"></i>
+        </label>
+        <div class="input-group">
+          <span class="input-group-text">
+            <i class="bi bi-volume-up"></i>
+          </span>
+          {{ form.noise_level }}
+        </div>
+      </div>
+
+    </div>
+
+    <hr class="my-4">
+
+    <!-- ===============================
+         AMENITIES
+         =============================== -->
+    <div>
+      <label class="form-label">Amenities</label>
+      <div class="row g-2">
+        <div class="col-md-3">{{ form.has_projector }} Projector</div>
+        <div class="col-md-3">{{ form.has_whiteboard }} Whiteboard</div>
+        <div class="col-md-3">{{ form.has_wifi }} Wi-Fi</div>
+        <div class="col-md-3">{{ form.has_power_plug }} Power Plugs</div>
+        <div class="col-md-3">{{ form.has_network_node }} Network Node</div>
+        <div class="col-md-3">{{ form.wheelchair_accessible }} Accessible</div>
+        <div class="col-md-3">{{ form.has_climate_control }} Climate Control</div>
+        <div class="col-md-3">{{ form.is_active }} Active</div>
+      </div>
+    </div>
+
+    <hr class="my-4">
+
+    <!-- ===============================
+         AVAILABILITY & RULES
+         =============================== -->
+    <div class="row g-3">
+
+      <div class="col-md-6">
+        <label class="form-label">Available From</label>
+        {{ form.available_from }}
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Available To</label>
+        {{ form.available_to }}
+      </div>
+
+      <div class="col-md-4">
+        <div class="form-floating">
+          {{ form.buffer_minutes }}
+          <label>Buffer (minutes)</label>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="form-floating">
+          {{ form.advance_notice }}
+          <label>Advance Notice (hours)</label>
+        </div>
+      </div>
+
+      <div class="col-md-4 d-flex align-items-center">
+        {{ form.requires_approval }} Approval Required
+      </div>
+
+      <div class="col-md-6 d-flex align-items-center">
+        {{ form.requires_payment }} Payment Required
+      </div>
+
+      <div class="col-md-6">
+        <div class="form-floating">
+          {{ form.fee_amount }}
+          <label>Fee Amount (RM)</label>
+        </div>
+      </div>
+
+    </div>
+
+    <hr class="my-4">
+
+    <!-- ===============================
+         ACCESS & NOTES
+         =============================== -->
+    <div class="row g-3">
+
+      <div class="col-md-6">
+        <label class="form-label">Access Policy</label>
+        {{ form.access_policy }}
+      </div>
+
+      <div class="col-12">
+        <div class="form-floating">
+          {{ form.booking_notes }}
+          <label>Booking Notes</label>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ===============================
+         ACTIONS
+         =============================== -->
+    <div class="mt-4">
+      <button type="submit" class="btn btn-primary">
+        <i class="bi bi-check-circle me-1"></i>
+        Save Space
+      </button>
+
+      {% if form.instance.pk %}
+        <a class="btn btn-secondary ms-2"
+           href="{% url 'space_detail' form.instance.space_id %}">
+          Cancel
+        </a>
+      {% else %}
+        <a class="btn btn-secondary ms-2"
+           href="{% url 'space_list' %}">
+          Cancel
+        </a>
+      {% endif %}
+    </div>
+
   </form>
 </div>
+
+<!-- Tooltips -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const tooltips = [].slice.call(
+    document.querySelectorAll('[data-bs-toggle="tooltip"]')
+  );
+  tooltips.map(el => new bootstrap.Tooltip(el));
+});
+</script>
+
 {% endblock %}

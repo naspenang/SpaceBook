@@ -9,12 +9,9 @@
   <!-- Page title -->
   <h2 class="mb-3">Library Spaces</h2>
 
-{% if filters_visible %}
-  <form method="get" class="d-flex align-items-center gap-2 flex-wrap mb-4">
+  {% if filters_visible %}
     {% include "website/space/_space_filters.html" %}
-  </form>
-{% endif %}
-
+  {% endif %}
 
   <!-- Result count -->
   {% if spaces %}
@@ -36,14 +33,17 @@
           >
             <div class="card shadow-sm border-0 h-100">
 
-              <!-- Placeholder image -->
               <img
-                src="{% static 'images/space-placeholder.jpg' %}"
+                src="{{ MEDIA_URL }}spaces/{{ space.space_id }}.jpg"
                 class="card-img-top"
                 style="height: 160px; object-fit: cover;"
                 alt="{{ space.space_name }}"
                 loading="lazy"
+                onerror="this.src='{% static 'images/space-placeholder.jpg' %}'"
               />
+
+
+
 
               <div class="card-body">
 

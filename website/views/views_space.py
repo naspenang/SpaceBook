@@ -1,9 +1,10 @@
 # website/views/views_space.py
+import os
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from website.models import LibrarySpace, Library, Campus
 from website.forms.forms_space import LibrarySpaceForm
-
+from django.conf import settings
 
 
 def space_list(request):
@@ -98,9 +99,20 @@ def space_create(request):
         initial["library"] = get_object_or_404(Library, library_code=preset_library_code)
 
     if request.method == "POST":
-        form = LibrarySpaceForm(request.POST)
+        form = LibrarySpaceForm(request.POST, request.FILES, initial=initial)
         if form.is_valid():
             space = form.save()
+
+            image = form.cleaned_data.get("image")
+            if image:
+                space_dir = os.path.join(settings.MEDIA_ROOT, "spaces")
+                os.makedirs(space_dir, exist_ok=True)
+
+                image_path = os.path.join(space_dir, f"{space.space_id}.jpg")
+                with open(image_path, "wb+") as destination:
+                    for chunk in image.chunks():
+                        destination.write(chunk)
+
             return redirect("space_detail", space_id=space.space_id)
     else:
         form = LibrarySpaceForm(initial=initial)
@@ -116,9 +128,20 @@ def space_edit(request, space_id):
     space = get_object_or_404(LibrarySpace, space_id=space_id)
 
     if request.method == "POST":
-        form = LibrarySpaceForm(request.POST, instance=space)
+        form = LibrarySpaceForm(request.POST, request.FILES, instance=space)
         if form.is_valid():
             space = form.save()
+
+            image = form.cleaned_data.get("image")
+            if image:
+                space_dir = os.path.join(settings.MEDIA_ROOT, "spaces")
+                os.makedirs(space_dir, exist_ok=True)
+
+                image_path = os.path.join(space_dir, f"{space.space_id}.jpg")
+                with open(image_path, "wb+") as destination:
+                    for chunk in image.chunks():
+                        destination.write(chunk)
+
             return redirect("space_detail", space_id=space.space_id)
     else:
         form = LibrarySpaceForm(instance=space)
@@ -129,11 +152,16 @@ def space_edit(request, space_id):
     })
 
 
+
 @login_required
 def space_delete(request, space_id):
     space = get_object_or_404(LibrarySpace, space_id=space_id)
 
     if request.method == "POST":
+        image_path = os.path.join(settings.MEDIA_ROOT, "spaces", f"{space.space_id}.jpg")
+        if os.path.exists(image_path):
+            os.remove(image_path)
+
         space.delete()
         return redirect("space_list")
 
